@@ -1,2 +1,6 @@
 streamlit
 openai
+langchain
+streamlit_chat
+sentence_transformers
+pinecone

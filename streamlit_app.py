@@ -1,56 +1,63 @@
-import streamlit as st
-from openai import OpenAI
-
-# Show title and description.
-st.title("💬 Chatbot")
-st.write(
-    "This is a simple chatbot that uses OpenAI's GPT-3.5 model to generate responses. "
-    "To use this app, you need to provide an OpenAI API key, which you can get [here](https://platform.openai.com/account/api-keys). "
-    "You can also learn how to build this app step by step by [following our tutorial](https://docs.streamlit.io/develop/tutorials/llms/build-conversational-apps)."
+from langchain.chat_models import ChatOpenAI
+from langchain.chains import ConversationChain
+from langchain.chains.conversation.memory import ConversationBufferWindowMemory
+from langchain.prompts import (
+    SystemMessagePromptTemplate,
+    HumanMessagePromptTemplate,
+    ChatPromptTemplate,
+    MessagesPlaceholder
 )
+import streamlit as st
+from streamlit_chat import message
+from utils import *
 
-# Ask user for their OpenAI API key via `st.text_input`.
-# Alternatively, you can store the API key in `./.streamlit/secrets.toml` and access it
-# via `st.secrets`, see https://docs.streamlit.io/develop/concepts/connections/secrets-management
-openai_api_key = st.text_input("OpenAI API Key", type="password")
-if not openai_api_key:
-    st.info("Please add your OpenAI API key to continue.", icon="🗝️")
-else:
+st.subheader("Chatbot with Langchain, ChatGPT, Pinecone, and Streamlit")
 
-    # Create an OpenAI client.
-    client = OpenAI(api_key=openai_api_key)
+if 'responses' not in st.session_state:
+    st.session_state['responses'] = ["How can I assist you?"]
 
-    # Create a session state variable to store the chat messages. This ensures that the
-    # messages persist across reruns.
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+if 'requests' not in st.session_state:
+    st.session_state['requests'] = []
 
-    # Display the existing chat messages via `st.chat_message`.
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+llm = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key="")
 
-    # Create a chat input field to allow the user to enter a message. This will display
-    # automatically at the bottom of the page.
-    if prompt := st.chat_input("What is up?"):
+if 'buffer_memory' not in st.session_state:
+    st.session_state.buffer_memory = ConversationBufferWindowMemory(k=3, return_messages=True)
 
-        # Store and display the current prompt.
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
+system_msg_template = SystemMessagePromptTemplate.from_template(template="""Answer the question as truthfully as possible using the provided context, 
+and if the answer is not contained within the text below, say 'I don't know'""")
 
-        # Generate a response using the OpenAI API.
-        stream = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
-            ],
-            stream=True,
-        )
+human_msg_template = HumanMessagePromptTemplate.from_template(template="{input}")
 
-        # Stream the response to the chat using `st.write_stream`, then store it in 
-        # session state.
-        with st.chat_message("assistant"):
-            response = st.write_stream(stream)
-        st.session_state.messages.append({"role": "assistant", "content": response})
+prompt_template = ChatPromptTemplate.from_messages(
+    [system_msg_template, MessagesPlaceholder(variable_name="history"), human_msg_template])
+
+conversation = ConversationChain(memory=st.session_state.buffer_memory, prompt=prompt_template, llm=llm, verbose=True)
+
+# container for chat history
+response_container = st.container()
+# container for text box
+textcontainer = st.container()
+
+with textcontainer:
+    query = st.text_input("Query: ", key="input")
+    if query:
+        with st.spinner("typing..."):
+            conversation_string = get_conversation_string()
+            # st.code(conversation_string)
+            refined_query = query_refiner(conversation_string, query)
+            st.subheader("Refined Query:")
+            st.write(refined_query)
+            context = find_match(refined_query)
+            # print(context)
+            response = conversation.predict(input=f"Context:\n {context} \n\n Query:\n{query}")
+        st.session_state.requests.append(query)
+        st.session_state.responses.append(response)
+with response_container:
+    if st.session_state['responses']:
+
+        for i in range(len(st.session_state['responses'])):
+            message(st.session_state['responses'][i], key=str(i))
+            if i < len(st.session_state['requests']):
+                message(st.session_state["requests"][i], is_user=True, key=str(i) + '_user')
+
