@@ -7,7 +7,6 @@ import streamlit as st
 openai.api_key = st.secrets["general"]["OPENAI_API_KEY"]
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-pinecone.init(api_key=st.secrets["general"]["PINECONE_API_KEY"], environment='us-east-1-aws')
 pc = pinecone.Pinecone(
         st.secrets["general"]["PINECONE_API_KEY"]
 )
