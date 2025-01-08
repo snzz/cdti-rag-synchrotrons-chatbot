@@ -11,7 +11,7 @@ pc = pinecone.Pinecone(
         st.secrets["general"]["PINECONE_API_KEY"]
 )
 
-index = pc['synchrotrons-index']
+index = pc.Index(host='synchrotrons-index')
 
 
 def find_match(input):
