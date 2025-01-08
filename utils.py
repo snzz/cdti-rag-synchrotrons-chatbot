@@ -16,7 +16,7 @@ index = pc.Index(host='synchrotrons-index')
 
 def find_match(input):
     input_em = model.encode(input).tolist()
-    result = index.query(input_em, top_k=2, include_metadata=True)
+    result = index.query(vector=input_em, top_k=2, include_metadata=True)
     return result['matches'][0]['metadata']['text'] + "\n" + result['matches'][1]['metadata']['text']
 
 
