@@ -21,9 +21,22 @@ def find_match(input):
 
 
 def query_refiner(conversation, query):
-    response = openai.Completion.create(
-        model="text-davinci-003",
-        prompt=f"Given the following user query and conversation log, formulate a question that would be the most relevant to provide the user with an answer from a knowledge base.\n\nCONVERSATION LOG: \n{conversation}\n\nQuery: {query}\n\nRefined Query:",
+    # response = openai.Completion.create(
+    #     model="text-davinci-003",
+    #     prompt=f"Given the following user query and conversation log, formulate a question that would be the most relevant to provide the user with an answer from a knowledge base.\n\nCONVERSATION LOG: \n{conversation}\n\nQuery: {query}\n\nRefined Query:",
+    #     temperature=0.7,
+    #     max_tokens=256,
+    #     top_p=1,
+    #     frequency_penalty=0,
+    #     presence_penalty=0
+    # )
+    response = openai.chat.completions.create(
+        model="gpt-4o",  # или gpt-4
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user",
+             "content": f"Given the following user query and conversation log, formulate a question that would be the most relevant to provide the user with an answer from a knowledge base.\n\nCONVERSATION LOG: \n{conversation}\n\nQuery: {query}\n\nRefined Query:"},
+        ],
         temperature=0.7,
         max_tokens=256,
         top_p=1,
