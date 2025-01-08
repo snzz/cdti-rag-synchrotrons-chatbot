@@ -8,7 +8,11 @@ openai.api_key = st.secrets["general"]["OPENAI_API_KEY"]
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 pinecone.init(api_key=st.secrets["general"]["PINECONE_API_KEY"], environment='us-east-1-aws')
-index = pinecone.Index('synchrotrons-index')
+pc = pinecone.Pinecone(
+        st.secrets["general"]["PINECONE_API_KEY"]
+)
+
+index = pc['synchrotrons-index']
 
 
 def find_match(input):
