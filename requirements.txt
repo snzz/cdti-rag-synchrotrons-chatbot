@@ -1,9 +1,8 @@
 streamlit
 openai
+torch
 langchain
-langchain_community
 langchain-community
 streamlit_chat
-sentence_transformers
 sentence-transformers
 pinecone
