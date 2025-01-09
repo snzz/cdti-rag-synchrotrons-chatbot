@@ -5,7 +5,8 @@ import streamlit as st
 
 
 openai.api_key = st.secrets["general"]["OPENAI_API_KEY"]
-model = SentenceTransformer('all-MiniLM-L6-v2')
+model = SentenceTransformer('sangmini/msmarco-cotmae-MiniLM-L12_en-ko-ja')
+    # SentenceTransformer('all-MiniLM-L6-v2'))
 
 pc = pinecone.Pinecone(
         st.secrets["general"]["PINECONE_API_KEY"]

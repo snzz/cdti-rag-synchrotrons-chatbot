@@ -49,7 +49,6 @@ with textcontainer:
             st.subheader("Refined Query:")
             st.write(refined_query)
             context = find_match(refined_query)
-            # print(context)
             response = conversation.predict(input=f"Context:\n {context} \n\n Query:\n{query}")
         st.session_state.requests.append(query)
         st.session_state.responses.append(response)
