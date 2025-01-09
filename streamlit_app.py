@@ -24,8 +24,7 @@ llm = ChatOpenAI(model_name="gpt-4o", openai_api_key=openai.api_key)
 if 'buffer_memory' not in st.session_state:
     st.session_state.buffer_memory = ConversationBufferWindowMemory(k=3, return_messages=True)
 
-system_msg_template = SystemMessagePromptTemplate.from_template(template="""Answer the question as truthfully as possible using the provided context, 
-and if the answer is not contained within the text below, say 'I don't know'""")
+system_msg_template = SystemMessagePromptTemplate.from_template(template="""Answer the question as truthfully as possible using the provided context""")
 
 human_msg_template = HumanMessagePromptTemplate.from_template(template="{input}")
 
