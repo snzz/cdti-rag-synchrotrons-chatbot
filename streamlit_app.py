@@ -11,10 +11,10 @@ import streamlit as st
 from streamlit_chat import message
 from utils import *
 
-st.subheader("Chatbot with Langchain, ChatGPT, Pinecone, and Streamlit")
+st.subheader("Ассистент по теме 'Синхротроны'")
 
 if 'responses' not in st.session_state:
-    st.session_state['responses'] = ["How can I assist you?"]
+    st.session_state['responses'] = ["Чем я могу Вам помочь?"]
 
 if 'requests' not in st.session_state:
     st.session_state['requests'] = []
@@ -40,16 +40,16 @@ response_container = st.container()
 textcontainer = st.container()
 
 with textcontainer:
-    query = st.text_input("Query: ", key="input")
+    query = st.text_input("Запрос: ", key="input")
     if query:
-        with st.spinner("typing..."):
+        with st.spinner("Печатает..."):
             conversation_string = get_conversation_string()
             # st.code(conversation_string)
             refined_query = query_refiner(conversation_string, query)
-            st.subheader("Refined Query:")
+            st.subheader("Контекст запросов:")
             st.write(refined_query)
             context = find_match(refined_query)
-            response = conversation.predict(input=f"Context:\n {context} \n\n Query:\n{query}")
+            response = conversation.predict(input=f"Контекст:\n {context} \n\n Запрос:\n{query}")
         st.session_state.requests.append(query)
         st.session_state.responses.append(response)
 with response_container:
