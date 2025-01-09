@@ -49,7 +49,7 @@ with textcontainer:
             st.subheader("Контекст запросов:")
             st.write(refined_query)
             context = find_match(refined_query)
-            response = conversation.predict(input=f"Контекст:\n {context} \n\n Запрос:\n{query}")
+            response = conversation.predict(input=f"Context:\n {context} \n\n Query:\n{query}")
         st.session_state.requests.append(query)
         st.session_state.responses.append(response)
 with response_container:
