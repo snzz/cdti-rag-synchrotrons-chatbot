@@ -1,3 +1,5 @@
+import os
+
 from langchain_pinecone import PineconeVectorStore
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.chains import ConversationChain
@@ -23,7 +25,8 @@ if 'responses' not in st.session_state:
 if 'requests' not in st.session_state:
     st.session_state['requests'] = []
 
-llm = ChatOpenAI(model_name="gpt-4o", openai_api_key=openai.api_key, temperature=0)
+os.environ['OPENAI_API_KEY'] = openai.api_key
+llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
 
 if 'buffer_memory' not in st.session_state:
     st.session_state.buffer_memory = ConversationBufferWindowMemory(k=3, return_messages=True)

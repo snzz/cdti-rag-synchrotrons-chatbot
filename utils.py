@@ -10,9 +10,7 @@ openai.api_key = st.secrets["general"]["OPENAI_API_KEY"]
 model = SentenceTransformer('sangmini/msmarco-cotmae-MiniLM-L12_en-ko-ja')
     # SentenceTransformer('all-MiniLM-L6-v2'))
 
-pc = pinecone.Pinecone(
-        st.secrets["general"]["PINECONE_API_KEY"]
-)
+pc = pinecone.Pinecone(st.secrets["general"]["PINECONE_API_KEY"])
 
 index = pc.Index(name='synchrotrons-index', host='https://synchrotrons-index-qdsnzxg.svc.aped-4627-b74a.pinecone.io')
 
