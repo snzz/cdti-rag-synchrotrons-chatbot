@@ -25,7 +25,7 @@ if 'responses' not in st.session_state:
 if 'requests' not in st.session_state:
     st.session_state['requests'] = []
 
-os.environ['OPENAI_API_KEY'] = openai.api_key
+os.environ['OPENAI_API_KEY'] = st.secrets["general"]["OPENAI_API_KEY"]
 index_name = 'synchrotrons-index'
 llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
 
