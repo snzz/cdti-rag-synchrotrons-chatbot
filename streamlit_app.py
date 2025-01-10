@@ -48,7 +48,9 @@ vectorstore = PineconeVectorStore.from_existing_index(index_name=index_name, emb
 qa = RetrievalQA.from_chain_type(
     llm=llm,
     chain_type='stuff',
-    retriever=vectorstore.as_retriever()
+    retriever=vectorstore.as_retriever(),
+    memory=st.session_state.buffer_memory,
+    chain_type_kwargs={"prompt": prompt_template}
 )
 
 # container for chat history
