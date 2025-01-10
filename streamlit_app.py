@@ -32,7 +32,7 @@ llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
 if 'buffer_memory' not in st.session_state:
     st.session_state.buffer_memory = ConversationBufferWindowMemory(k=3, return_messages=True)
 
-system_msg_template = SystemMessagePromptTemplate.from_template(template="""Answer the question as truthfully as possible using the provided context""")
+system_msg_template = SystemMessagePromptTemplate.from_template(template="""Ты ассистент физических наук, отвечай настолько, насколько возможно правдиво, исходя из текущего контекста""")
 
 human_msg_template = HumanMessagePromptTemplate.from_template(template="{input}")
 
@@ -72,6 +72,7 @@ with textcontainer:
             # response = conversation.predict(input=f"Context:\n {context} \n\n Query:\n{query}")
         st.session_state.requests.append(query)
         st.session_state.responses.append(response)
+        query = ''
 with response_container:
     if st.session_state['responses']:
 
