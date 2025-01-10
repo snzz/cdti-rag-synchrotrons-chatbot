@@ -6,3 +6,5 @@ langchain-community
 streamlit_chat
 sentence-transformers
 pinecone
+langchain_openai
+langchain_pinecone

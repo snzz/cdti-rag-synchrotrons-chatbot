@@ -1,3 +1,5 @@
+import re
+
 from sentence_transformers import SentenceTransformer
 import pinecone
 import openai
@@ -50,3 +52,14 @@ def get_conversation_string():
         conversation_string += "Human: " + st.session_state['requests'][i] + "\n"
         conversation_string += "Bot: " + st.session_state['responses'][i + 1] + "\n"
     return conversation_string
+
+
+def format_math_expressions(text):
+    math_pattern = r'([a-zA-Z_][a-zA-Z0-9_]*|\d+[\+\-\*/\^\=\(\)]*\d*)'
+    expressions = re.findall(math_pattern, text)
+
+    for expr in expressions:
+        if not (expr.startswith('$') and expr.endswith('$')):
+            text = text.replace(expr, f"${expr}$")
+
+    return text

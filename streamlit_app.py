@@ -1,5 +1,7 @@
-from langchain_community.chat_models import ChatOpenAI
+from langchain_pinecone import PineconeVectorStore
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.chains import ConversationChain
+from langchain.chains import RetrievalQA
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from langchain.prompts import (
     SystemMessagePromptTemplate,
@@ -9,6 +11,8 @@ from langchain.prompts import (
 )
 import streamlit as st
 from streamlit_chat import message
+
+import utils
 from utils import *
 
 st.subheader("Ассистент по теме 'Синхротроны'")
@@ -19,7 +23,7 @@ if 'responses' not in st.session_state:
 if 'requests' not in st.session_state:
     st.session_state['requests'] = []
 
-llm = ChatOpenAI(model_name="gpt-4o", openai_api_key=openai.api_key)
+llm = ChatOpenAI(model_name="gpt-4o", openai_api_key=openai.api_key, temperature=0)
 
 if 'buffer_memory' not in st.session_state:
     st.session_state.buffer_memory = ConversationBufferWindowMemory(k=3, return_messages=True)
@@ -33,6 +37,16 @@ prompt_template = ChatPromptTemplate.from_messages(
 
 conversation = ConversationChain(memory=st.session_state.buffer_memory, prompt=prompt_template, llm=llm, verbose=True)
 
+embeddings = OpenAIEmbeddings(
+    model='text-embedding-3-small'
+)
+vectorstore = PineconeVectorStore.from_existing_index(index_name=utils.index, embedding=embeddings)
+qa = RetrievalQA.from_chain_type(
+    llm=llm,
+    chain_type='stuff',
+    retriever=vectorstore.as_retriever()
+)
+
 # container for chat history
 response_container = st.container()
 # container for text box
@@ -42,13 +56,16 @@ with textcontainer:
     query = st.text_input("Запрос: ", key="input")
     if query:
         with st.spinner("Печатает..."):
-            conversation_string = get_conversation_string()
-            # st.code(conversation_string)
-            refined_query = query_refiner(conversation_string, query)
-            st.subheader("Контекст запросов:")
-            st.write(refined_query)
-            context = find_match(refined_query)
-            response = conversation.predict(input=f"Context:\n {context} \n\n Query:\n{query}")
+            similar_docs = vectorstore.similarity_search(query)
+            response = qa.invoke(query)
+
+            # conversation_string = get_conversation_string()
+            # # st.code(conversation_string)
+            # refined_query = query_refiner(conversation_string, query)
+            # st.subheader("Контекст запросов:")
+            # st.write(refined_query)
+            # context = find_match(refined_query)
+            # response = conversation.predict(input=f"Context:\n {context} \n\n Query:\n{query}")
         st.session_state.requests.append(query)
         st.session_state.responses.append(response)
 with response_container:
