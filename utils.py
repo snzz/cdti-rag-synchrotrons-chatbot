@@ -7,8 +7,7 @@ import openai
 import streamlit as st
 
 
-openai.api_key = st.secrets["general"]["OPENAI_API_KEY"]
-os.environ['PINECONE_API_KEY'] = openai.api_key
+os.environ['PINECONE_API_KEY'] = st.secrets["general"]["OPENAI_API_KEY"]
 model = SentenceTransformer('sangmini/msmarco-cotmae-MiniLM-L12_en-ko-ja')
     # SentenceTransformer('all-MiniLM-L6-v2'))
 
