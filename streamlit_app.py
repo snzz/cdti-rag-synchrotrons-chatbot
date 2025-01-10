@@ -26,6 +26,7 @@ if 'requests' not in st.session_state:
     st.session_state['requests'] = []
 
 os.environ['OPENAI_API_KEY'] = openai.api_key
+index_name = 'synchrotrons-index'
 llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
 
 if 'buffer_memory' not in st.session_state:
@@ -43,7 +44,7 @@ conversation = ConversationChain(memory=st.session_state.buffer_memory, prompt=p
 embeddings = OpenAIEmbeddings(
     model='text-embedding-3-small'
 )
-vectorstore = PineconeVectorStore.from_existing_index(index_name=utils.index, embedding=embeddings)
+vectorstore = PineconeVectorStore.from_existing_index(index_name=index_name, embedding=embeddings)
 qa = RetrievalQA.from_chain_type(
     llm=llm,
     chain_type='stuff',

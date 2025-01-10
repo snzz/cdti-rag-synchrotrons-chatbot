@@ -1,3 +1,4 @@
+import os
 import re
 
 from sentence_transformers import SentenceTransformer
@@ -7,6 +8,7 @@ import streamlit as st
 
 
 openai.api_key = st.secrets["general"]["OPENAI_API_KEY"]
+os.environ['PINECONE_API_KEY'] = openai.api_key
 model = SentenceTransformer('sangmini/msmarco-cotmae-MiniLM-L12_en-ko-ja')
     # SentenceTransformer('all-MiniLM-L6-v2'))
 
