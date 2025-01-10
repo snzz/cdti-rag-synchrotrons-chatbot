@@ -61,7 +61,7 @@ with textcontainer:
     if query:
         with st.spinner("Печатает..."):
             similar_docs = vectorstore.similarity_search(query)
-            response = qa.invoke(query).result
+            response = qa.invoke(query)['result']
 
             # conversation_string = get_conversation_string()
             # # st.code(conversation_string)
