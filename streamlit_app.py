@@ -34,12 +34,14 @@ if 'buffer_memory' not in st.session_state:
 # Дефолтный промпт для ассистента
 system_msg_template = SystemMessagePromptTemplate.from_template(template="""
 Ты ассистент физических наук, отвечай настолько, насколько возможно правдиво, исходя из текущего контекста.
+Контекст: {context}
 """)
 
 human_msg_template = HumanMessagePromptTemplate.from_template(template="{input}")
 
 prompt_template = ChatPromptTemplate.from_messages(
-    [system_msg_template, MessagesPlaceholder(variable_name="history"), human_msg_template])
+    [system_msg_template, MessagesPlaceholder(variable_name="history"), human_msg_template]
+)
 
 embeddings = OpenAIEmbeddings(
     model='text-embedding-3-small'
@@ -62,13 +64,10 @@ with textcontainer:
     query = st.text_input("Запрос: ", key="input")
     if query:
         with st.spinner("Печатает..."):
-            # Добавляем контекст из памяти
             context = st.session_state.buffer_memory.load_memory_variables({})
-            # Формируем полный запрос с контекстом
             full_query = f"Контекст: {context['history']}\nЗапрос: {query}"
             similar_docs = vectorstore.similarity_search(full_query)
-            response = qa.invoke(full_query)['result']
-            # Сохраняем запрос и ответ в память
+            response = qa.invoke({"query": full_query, "context": similar_docs})['result']
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
         st.session_state.requests.append(query)
         st.session_state.responses.append(response)
