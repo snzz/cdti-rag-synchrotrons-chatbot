@@ -2,7 +2,6 @@ import os
 
 from langchain_pinecone import PineconeVectorStore
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from langchain.chains import ConversationChain
 from langchain.chains import RetrievalQA
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from langchain.prompts import (
@@ -32,14 +31,15 @@ llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
 if 'buffer_memory' not in st.session_state:
     st.session_state.buffer_memory = ConversationBufferWindowMemory(k=3, return_messages=True)
 
-system_msg_template = SystemMessagePromptTemplate.from_template(template="""Ты ассистент физических наук, отвечай настолько, насколько возможно правдиво, исходя из текущего контекста""")
+# Дефолтный промпт для ассистента
+system_msg_template = SystemMessagePromptTemplate.from_template(template="""
+Ты ассистент физических наук, отвечай настолько, насколько возможно правдиво, исходя из текущего контекста.
+""")
 
 human_msg_template = HumanMessagePromptTemplate.from_template(template="{input}")
 
 prompt_template = ChatPromptTemplate.from_messages(
     [system_msg_template, MessagesPlaceholder(variable_name="history"), human_msg_template])
-
-conversation = ConversationChain(memory=st.session_state.buffer_memory, prompt=prompt_template, llm=llm, verbose=True)
 
 embeddings = OpenAIEmbeddings(
     model='text-embedding-3-small'
@@ -60,24 +60,20 @@ with textcontainer:
     query = st.text_input("Запрос: ", key="input")
     if query:
         with st.spinner("Печатает..."):
-            similar_docs = vectorstore.similarity_search(query)
-            response = qa.invoke(query)['result']
-
-            # conversation_string = get_conversation_string()
-            # # st.code(conversation_string)
-            # refined_query = query_refiner(conversation_string, query)
-            # st.subheader("Контекст запросов:")
-            # st.write(refined_query)
-            # context = find_match(refined_query)
-            # response = conversation.predict(input=f"Context:\n {context} \n\n Query:\n{query}")
+            # Добавляем контекст из памяти
+            context = st.session_state.buffer_memory.load_memory_variables({})
+            # Формируем полный запрос с контекстом
+            full_query = f"Контекст: {context['history']}\nЗапрос: {query}"
+            similar_docs = vectorstore.similarity_search(full_query)
+            response = qa.invoke(full_query)['result']
+            # Сохраняем запрос и ответ в память
+            st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
         st.session_state.requests.append(query)
         st.session_state.responses.append(response)
         query = ''
 with response_container:
     if st.session_state['responses']:
-
         for i in range(len(st.session_state['responses'])):
             message(st.session_state['responses'][i], key=str(i))
             if i < len(st.session_state['requests']):
                 message(st.session_state["requests"][i], is_user=True, key=str(i) + '_user')
-
