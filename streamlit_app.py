@@ -69,9 +69,11 @@ with textcontainer:
         with st.spinner("Печатает..."):
             # Получаем историю диалога из памяти
             chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
+            if chat_history is None:
+                chat_history = []
 
             # Вызываем цепочку с правильными входными данными
-            response = qa.invoke(input=query, chat_history=chat_history)['answer']
+            response = qa.invoke({"query": query, "chat_history": chat_history})['answer']
 
             # Сохраняем контекст
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
