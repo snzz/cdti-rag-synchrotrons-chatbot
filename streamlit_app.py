@@ -68,7 +68,7 @@ qa = RetrievalQA.from_chain_type(
         "prompt": prompt_template,
         "memory": ConversationBufferMemory(
             memory_key="history",
-            input_key="input"),
+            input_key="query"),
     }
 )
 
@@ -87,7 +87,7 @@ with textcontainer:
                 chat_history = []
 
             # Вызываем цепочку с правильными входными данными
-            response = qa.invoke({'input': query, 'history': chat_history})['result']
+            response = qa.invoke({'query': query, 'history': chat_history})['result']
 
             # Сохраняем контекст
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
