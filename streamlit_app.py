@@ -84,7 +84,7 @@ with textcontainer:
                 response = qa.invoke(query)['result']
 
                 with st.chat_message("assistant"):
-                    st.write_stream(response)
+                    st.write(response)
                 #response = utils.format_math_expressions(response)
 
                 # Сохраняем контекст
