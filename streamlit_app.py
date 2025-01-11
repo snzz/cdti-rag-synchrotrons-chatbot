@@ -82,7 +82,7 @@ with textcontainer:
             # }
             #
             # response = qa.invoke(query=query, history=context['history'], input=query)['result']
-            response = qa('query')['result']
+            response = qa.invoke(query=query, chat_history=context['history'])['result']
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
 
         st.session_state.requests.append(query)
