@@ -66,13 +66,12 @@ with textcontainer:
         with st.spinner("Печатает..."):
             context = st.session_state.buffer_memory.load_memory_variables({})
             full_query = f"Контекст: {context['history']}\nЗапрос: {query}"
-            similar_docs = vectorstore.similarity_search(full_query)
 
             inputs = {
                 'query': query,  # Ключ, который ожидает RetrievalQA
                 'history': context['history'],  # История диалога
-                'context': similar_docs  # Извлеченные документы
             }
+
             response = qa.invoke(inputs)['result']
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
 
