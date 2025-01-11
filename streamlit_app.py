@@ -56,8 +56,6 @@ qa = ConversationalRetrievalChain.from_llm(
     retriever=vectorstore.as_retriever(),
     return_source_documents=True,
     combine_docs_chain_kwargs={"prompt": prompt_template},
-    input_key="query",  # Указываем, чтобы запрос принимался с ключом 'query'
-    output_key="answer"  # Это ключ, где будет храниться ответ
 )
 
 # container for chat history
