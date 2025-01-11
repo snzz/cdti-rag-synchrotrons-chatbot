@@ -54,45 +54,13 @@ def get_conversation_string():
 
 
 def format_math_expressions(text):
-    # # Убираем квадратные скобки и обрамляем содержимое в $ (для выражений на нескольких строках)
-    # text = re.sub(r'\[\s*(.*?)\s*\]', r'$$\1$$', text, flags=re.DOTALL)
-    # # Убираем пробелы перед и после $ внутри формулы, только если пробелы стоят до или после символов $
-    # text = re.sub(r'\s*\$(.*?)\s*\$', r'$\1$', text)
-    # text = re.sub(r'\s+\$(?=\S)', '$', text)
-    # text = re.sub(r'\s+\$(?=\S)', '$', text)
-    # # Обрабатываем выражения в круглых скобках () и убираем скобки, обрамляя знаком $
-    # text = re.sub(r'\\\((.*?)\\\)', r'$\1$', text)
-    # return text
     # Убираем квадратные скобки и обрамляем содержимое в $ (для выражений на нескольких строках)
-    while '[' in text and ']' in text:
-        start = text.find('[')
-        end = text.find(']')
-        text = text[:start] + '$' + text[start + 1:end].strip() + '$' + text[end + 1:]
-
-    # Убираем пробелы перед и после $ внутри формулы
-    i = 0
-    while i < len(text):
-        if text[i] == '$':
-            j = i + 1
-            while j < len(text) and text[j] != '$':
-                j += 1
-            # Убираем пробелы перед и после содержимого между $
-            if j < len(text):
-                content = text[i + 1:j].strip()
-                text = text[:i + 1] + content + text[j:]
-                i = j
-        i += 1
-
+    text = re.sub(r'\[\s*(.*?)\s*\]', r'$$\1$$', text, flags=re.DOTALL)
+    # Убираем пробелы перед и после $ внутри формулы, только если пробелы стоят до или после символов $
+    text = re.sub(r'\s*\$(.*?)\s*\$', r'$\1$', text)
+    text = re.sub(r'\s+\$(?=\S)', '$', text)
+    text = re.sub(r'\s+\$(?=\S)', '$', text)
     # Обрабатываем выражения в круглых скобках () и убираем скобки, обрамляя знаком $
-    i = 0
-    while i < len(text):
-        if text[i:i + 2] == '\\(':
-            j = text.find('\\)', i + 2)
-            if j != -1:
-                content = text[i + 2:j].strip()
-                text = text[:i] + '$' + content + '$' + text[j + 2:]
-                i = j + 2
-        i += 1
-
+    text = re.sub(r'\\\((.*?)\\\)', r'$\1$', text)
     return text
 
