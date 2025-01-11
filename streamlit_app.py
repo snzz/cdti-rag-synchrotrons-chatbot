@@ -80,7 +80,7 @@ with textcontainer:
                 chat_history = []
 
             # Вызываем цепочку с правильными входными данными
-            response = qa.invoke(query=query)['result']
+            response = qa.invoke(input=query)['result']
 
             # Сохраняем контекст
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
