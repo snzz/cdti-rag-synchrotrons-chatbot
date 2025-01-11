@@ -61,6 +61,7 @@ def format_math_expressions(text):
     text = re.sub(r'\\\((.*?)\\\)', r'$\1$', text)
     # Убираем пробелы до и после $ в уже заключенных выражениях
     text = re.sub(r'\s*\$\s*', '$', text)
+    text = re.sub(r'\s*\$\s*', '$', text)
     return text
 
     # math_pattern = r'([a-zA-Z_][a-zA-Z0-9_]*|\d+[\+\-\*/\^\=\(\)]*\d*)'
