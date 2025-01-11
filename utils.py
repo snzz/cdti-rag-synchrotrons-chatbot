@@ -54,12 +54,10 @@ def get_conversation_string():
 
 
 def format_math_expressions(text):
-    # Обрабатываем выражения в квадратных скобках []
-    text = re.sub(r'(\[.*?\])', r'$\1$', text)
-    # Обрабатываем выражения в круглых скобках ()
-    text = re.sub(r'\\\([^\)]*?\\\)', r'$\g<0>$', text)
+    text = re.sub(r'\[(.*?)\]', r'$\1$', text)
+    text = re.sub(r'\\\((.*?)\\\)', r'$\1$', text)
     return text
-    
+
     # math_pattern = r'([a-zA-Z_][a-zA-Z0-9_]*|\d+[\+\-\*/\^\=\(\)]*\d*)'
     # expressions = re.findall(math_pattern, text)
     #
