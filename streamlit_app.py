@@ -56,6 +56,8 @@ qa = ConversationalRetrievalChain.from_llm(
     retriever=vectorstore.as_retriever(),
     return_source_documents=True,
     combine_docs_chain_kwargs={"prompt": prompt_template},
+    input_key="query",  # Указываем, чтобы запрос принимался с ключом 'query'
+    output_key="answer"  # Это ключ, где будет храниться ответ
 )
 
 # container for chat history
@@ -73,7 +75,7 @@ with textcontainer:
                 chat_history = []
 
             # Вызываем цепочку с правильными входными данными
-            response = qa.invoke({"question": query, "chat_history": chat_history})['answer']
+            response = qa.invoke({"query": query, "chat_history": chat_history})['answer']
 
             # Сохраняем контекст
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
