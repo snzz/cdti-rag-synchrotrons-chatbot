@@ -62,7 +62,7 @@ def format_math_expressions(text):
     # text = re.sub(r'\s+\$(?=\S)', '$', text)
     # # Обрабатываем выражения в круглых скобках () и убираем скобки, обрамляя знаком $
     # text = re.sub(r'\\\((.*?)\\\)', r'$\1$', text)
-    text = re.sub(r'\[\s*(.*?)\s*\]', r'$$\1$$', text, flags=re.DOTALL)
+    text = re.sub(r'\[\s*(.*?)\s*\]', r'$\1$', text, flags=re.DOTALL)
 
     # Убираем пробелы перед и после $ внутри формулы
     text = re.sub(r'\s*\$(.*?)\s*\$', r'$\1$', text)
