@@ -1,5 +1,6 @@
 import os
 
+from langchain.chains.conversational_retrieval.base import ConversationalRetrievalChain
 from langchain_pinecone import PineconeVectorStore
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.chains import RetrievalQA
@@ -47,12 +48,20 @@ embeddings = OpenAIEmbeddings(
     model='text-embedding-3-small'
 )
 vectorstore = PineconeVectorStore.from_existing_index(index_name=index_name, embedding=embeddings)
-qa = RetrievalQA.from_chain_type(
+# qa = RetrievalQA.from_chain_type(
+#     llm=llm,
+#     chain_type='stuff',
+#     retriever=vectorstore.as_retriever(),
+#     memory=st.session_state.buffer_memory,
+#     chain_type_kwargs={"prompt": prompt_template}
+# )
+qa = ConversationalRetrievalChain.from_llm(
     llm=llm,
     chain_type='stuff',
-    retriever=vectorstore.as_retriever(),
     memory=st.session_state.buffer_memory,
-    chain_type_kwargs={"prompt": prompt_template}
+    retriever=vectorstore.as_retriever(),
+    return_source_documents=True,
+    prompt_template=prompt_template
 )
 
 # container for chat history
@@ -67,12 +76,13 @@ with textcontainer:
             context = st.session_state.buffer_memory.load_memory_variables({})
             full_query = f"Контекст: {context['history']}\nЗапрос: {query}"
 
-            inputs = {
-                'query': query,  # Ключ, который ожидает RetrievalQA
-                'history': context['history'],  # История диалога
-            }
-
-            response = qa.invoke(query=query, history=context['history'], input=query)['result']
+            # inputs = {
+            #     'query': query,  # Ключ, который ожидает RetrievalQA
+            #     'history': context['history'],  # История диалога
+            # }
+            #
+            # response = qa.invoke(query=query, history=context['history'], input=query)['result']
+            response = qa('query')['result']
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
 
         st.session_state.requests.append(query)
