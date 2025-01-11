@@ -37,7 +37,7 @@ system_msg_template = SystemMessagePromptTemplate.from_template(template="""
 Контекст: {context}
 """)
 
-human_msg_template = HumanMessagePromptTemplate.from_template(template="{input}")
+human_msg_template = HumanMessagePromptTemplate.from_template(template="{query}")
 
 prompt_template = ChatPromptTemplate.from_messages(
     [system_msg_template, MessagesPlaceholder(variable_name="history"), human_msg_template]
