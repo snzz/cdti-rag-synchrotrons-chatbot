@@ -49,13 +49,20 @@ embeddings = OpenAIEmbeddings(
 )
 vectorstore = PineconeVectorStore.from_existing_index(index_name=index_name, embedding=embeddings)
 
-qa = ConversationalRetrievalChain.from_llm(
+# qa = ConversationalRetrievalChain.from_llm(
+#     llm=llm,
+#     chain_type='stuff',
+#     memory=st.session_state.buffer_memory,
+#     retriever=vectorstore.as_retriever(),
+#     return_source_documents=True,
+#     combine_docs_chain_kwargs={"prompt": prompt_template},
+# )
+
+qa = RetrievalQA.from_chain_type(
     llm=llm,
     chain_type='stuff',
-    memory=st.session_state.buffer_memory,
     retriever=vectorstore.as_retriever(),
-    return_source_documents=True,
-    combine_docs_chain_kwargs={"prompt": prompt_template},
+    memory=st.session_state.buffer_memory,
 )
 
 # container for chat history
@@ -73,7 +80,7 @@ with textcontainer:
                 chat_history = []
 
             # Вызываем цепочку с правильными входными данными
-            response = qa.invoke({"query": query, "chat_history": chat_history, 'question': query})['answer']
+            response = qa.invoke(query=query)['result']
 
             # Сохраняем контекст
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
