@@ -82,8 +82,8 @@ with textcontainer:
 
                 # Вызываем цепочку с правильными входными данными
                 response = qa.invoke(query)['result']
-                st.write(response)
-                #response = utils.format_math_expressions(response)
+                response = utils.format_math_expressions(response)
+                st.write_stream(response)
 
                 # Сохраняем контекст
                 st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
