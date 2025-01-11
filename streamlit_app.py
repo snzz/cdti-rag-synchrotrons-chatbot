@@ -82,9 +82,7 @@ with textcontainer:
 
                 # Вызываем цепочку с правильными входными данными
                 response = qa.invoke(query)['result']
-
-                with st.chat_message("assistant"):
-                    st.write(response)
+                st.write(response)
                 #response = utils.format_math_expressions(response)
 
                 # Сохраняем контекст
