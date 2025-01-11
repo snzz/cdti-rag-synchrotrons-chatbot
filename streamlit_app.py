@@ -83,7 +83,6 @@ with textcontainer:
                 # Вызываем цепочку с правильными входными данными
                 response = qa.invoke(query)['result']
                 response = utils.format_math_expressions(response)
-                st.markdown(response)
 
                 # Сохраняем контекст
                 st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
@@ -96,4 +95,4 @@ with response_container:
         for i in range(len(st.session_state['responses'])):
             message(st.session_state['responses'][i], key=str(i))
             if i < len(st.session_state['requests']):
-                message(st.session_state["requests"][i], is_user=True, avatar_style='adventurer-neutral', key=str(i) + '_user')
+                message(st.session_state["requests"][i], is_user=True, key=str(i) + '_user')
