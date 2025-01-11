@@ -72,7 +72,7 @@ with textcontainer:
                 'history': context['history'],  # История диалога
             }
 
-            response = qa.invoke(query=query, history=context['history'])['result']
+            response = qa.invoke(query=query, history=context['history'], input=query)['result']
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
 
         st.session_state.requests.append(query)
