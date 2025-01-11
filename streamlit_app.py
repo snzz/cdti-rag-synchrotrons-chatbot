@@ -61,7 +61,7 @@ qa = ConversationalRetrievalChain.from_llm(
     memory=st.session_state.buffer_memory,
     retriever=vectorstore.as_retriever(),
     return_source_documents=True,
-    chain_type_kwargs={"prompt": prompt_template}
+    combine_docs_chain_kwargs={"prompt": prompt_template},
 )
 
 # container for chat history
