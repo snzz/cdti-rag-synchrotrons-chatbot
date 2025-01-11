@@ -68,15 +68,14 @@ with textcontainer:
             full_query = f"Контекст: {context['history']}\nЗапрос: {query}"
             similar_docs = vectorstore.similarity_search(full_query)
 
-            # Передаем все необходимые ключи в qa.invoke
-            response = qa.invoke({
-                "query": query,
-                "input": query,
-                "history": context['history'],
-                "context": similar_docs
-            })['result']
-
+            inputs = {
+                "query": query,  # Ключ, который ожидает RetrievalQA
+                "history": context['history'],  # История диалога
+                "context": similar_docs  # Извлеченные документы
+            }
+            response = qa.invoke(inputs)['result']
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
+
         st.session_state.requests.append(query)
         st.session_state.responses.append(response)
         query = ''
