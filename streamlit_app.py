@@ -73,7 +73,7 @@ with textcontainer:
                 chat_history = []
 
             # Вызываем цепочку с правильными входными данными
-            response = qa.invoke({"query": query, "chat_history": chat_history})['answer']
+            response = qa.invoke({"question": query, "chat_history": chat_history})['answer']
 
             # Сохраняем контекст
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
