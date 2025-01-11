@@ -71,7 +71,7 @@ response_container = st.container()
 textcontainer = st.container()
 
 with textcontainer:
-    query = st.text_input("Запрос: ", key="input")
+    query = st.text_input("Запрос: ", key="input", placeholder='Введите запрос')
     if query.strip():
         with st.spinner("Печатает..."):
             # Получаем историю диалога из памяти
@@ -81,13 +81,13 @@ with textcontainer:
 
             # Вызываем цепочку с правильными входными данными
             response = qa.invoke(query)['result']
+            response = utils.format_math_expressions(response)
 
             # Сохраняем контекст
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
 
         st.session_state.requests.append(query)
         st.session_state.responses.append(response)
-        query = ''
 
 with response_container:
     if st.session_state['responses']:
