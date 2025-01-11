@@ -63,13 +63,6 @@ qa = RetrievalQA.from_chain_type(
     llm=llm,
     chain_type='stuff',
     retriever=vectorstore.as_retriever(),
-    chain_type_kwargs={
-        "verbose": True,
-        "prompt": prompt_template,
-        "memory": ConversationBufferMemory(
-            memory_key="history",
-            input_key="query"),
-    }
 )
 
 # container for chat history
@@ -87,7 +80,7 @@ with textcontainer:
                 chat_history = []
 
             # Вызываем цепочку с правильными входными данными
-            response = qa.invoke({'query': query, 'history': chat_history})['result']
+            response = qa.invoke(query)['result']
 
             # Сохраняем контекст
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
