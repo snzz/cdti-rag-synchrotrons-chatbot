@@ -65,7 +65,7 @@ textcontainer = st.container()
 
 with textcontainer:
     query = st.text_input("Запрос: ", key="input")
-    if query:
+    if query.strip():
         with st.spinner("Печатает..."):
             # Получаем историю диалога из памяти
             chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
