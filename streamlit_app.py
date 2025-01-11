@@ -73,21 +73,22 @@ textcontainer = st.container()
 with textcontainer:
     query = st.text_input("Запрос: ", key="input", placeholder='Введите запрос')
     if query.strip():
-        with st.spinner("Печатает..."):
-            # Получаем историю диалога из памяти
-            chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
-            if chat_history is None:
-                chat_history = []
+        with st.chat_message("assistant"):
+            with st.spinner("Печатает..."):
+                # Получаем историю диалога из памяти
+                chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
+                if chat_history is None:
+                    chat_history = []
 
-            # Вызываем цепочку с правильными входными данными
-            response = qa.invoke(query)['result']
-            response = utils.format_math_expressions(response)
+                # Вызываем цепочку с правильными входными данными
+                response = qa.invoke(query)['result']
+                response = utils.format_math_expressions(response)
 
-            # Сохраняем контекст
-            st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
+                # Сохраняем контекст
+                st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
 
-        st.session_state.requests.append(query)
-        st.session_state.responses.append(response)
+            st.session_state.requests.append(query)
+            st.session_state.responses.append(response)
 
 with response_container:
     if st.session_state['responses']:
