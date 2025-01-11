@@ -1,6 +1,7 @@
 import os
 
 from langchain.chains.conversational_retrieval.base import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
 from langchain_pinecone import PineconeVectorStore
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.chains import RetrievalQA
@@ -62,7 +63,13 @@ qa = RetrievalQA.from_chain_type(
     llm=llm,
     chain_type='stuff',
     retriever=vectorstore.as_retriever(),
-    memory=st.session_state.buffer_memory,
+    chain_type_kwargs={
+        "verbose": True,
+        "prompt": prompt_template,
+        "memory": ConversationBufferMemory(
+            memory_key="history",
+            input_key="input"),
+    }
 )
 
 # container for chat history
@@ -80,7 +87,7 @@ with textcontainer:
                 chat_history = []
 
             # Вызываем цепочку с правильными входными данными
-            response = qa.invoke(input=query)['result']
+            response = qa.invoke({'input': query, 'history': chat_history})['result']
 
             # Сохраняем контекст
             st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
