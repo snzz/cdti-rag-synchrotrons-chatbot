@@ -82,8 +82,7 @@ with textcontainer:
 
                 # Вызываем цепочку с правильными входными данными
                 response = qa.invoke(query)['result']
-                # response = utils.format_math_expressions(response)
-                response = re.sub(r'\[\s*(.*?)\s*\]', r'\1', response, flags=re.DOTALL)
+                response = utils.format_math_expressions(response)
                 st.markdown(response)
 
                 # Сохраняем контекст
