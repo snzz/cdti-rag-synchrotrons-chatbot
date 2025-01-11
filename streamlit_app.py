@@ -84,7 +84,7 @@ with textcontainer:
                 response = qa.invoke(query)['result']
                 # response = utils.format_math_expressions(response)
                 response = re.sub(r'\[\s*(.*?)\s*\]', r'\1', response, flags=re.DOTALL)
-                st.latex(response)
+                st.markdown(response)
 
                 # Сохраняем контекст
                 st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
