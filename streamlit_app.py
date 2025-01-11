@@ -70,7 +70,7 @@ with textcontainer:
             # qa.invoke(query=query, context=similar_docs, history=context['history'])
             # Передаем все необходимые ключи в qa.invoke
             response = qa.invoke({
-                "input": query,
+                "query": query,
                 "history": context['history'],
                 "context": similar_docs
             })['result']
