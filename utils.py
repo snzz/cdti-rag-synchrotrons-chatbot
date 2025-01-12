@@ -56,6 +56,7 @@ def get_conversation_string():
 def format_math_expressions(text):
     # Убираем квадратные скобки и обрамляем содержимое в $ (для выражений на нескольких строках)
     text = re.sub(r'\[\s*(.*?)\s*\]', r'$$\1$$', text, flags=re.DOTALL)
+    text = re.sub(r'\n(?=.*\$)', '', text)
     # Убираем пробелы перед и после $ внутри формулы, только если пробелы стоят до или после символов $
     text = re.sub(r'\s*\$(.*?)\s*\$', r'$\1$', text)
     text = re.sub(r'\s+\$(?=\S)', '$', text)
