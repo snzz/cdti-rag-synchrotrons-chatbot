@@ -79,10 +79,10 @@ with textcontainer:
                 {"question": query, "history": formatted_history, "chat_history": formatted_history}
             )
 
-            # debug
-            with st.chat_message('assistant'):
-                st.write(response["answer"])
-            #
+            # # debug
+            # with st.chat_message('assistant'):
+            #     st.write(response["answer"])
+            # #
 
             answer = utils.format_math_expressions(response["answer"])
             # Сохранение вопроса и ответа в контексте
