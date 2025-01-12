@@ -96,7 +96,7 @@ with textcontainer:
 
             test = '''
             Формула градиента скалярного поля выражается следующим образом:
-$$\text{grad} , \phi = \nabla \phi = \left( \frac{\partial \phi}{\partial x}, \frac{\partial \phi}{\partial y}, \frac{\partial \phi}{\partial z} \right)$$
+$$\\text{grad} , \\phi = \\nabla \\phi = \\left( \\frac{\\partial \\phi}{\\partial x}, \\frac{\\partial \\phi}{\\partial y}, \\frac{\\partial \\phi}{\\partial z} \\right)$$
 где:
             '''
             with st.chat_message('assistant'):
