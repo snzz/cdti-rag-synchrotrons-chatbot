@@ -94,6 +94,7 @@ with textcontainer:
             for doc in response["source_documents"]:
                 answer += f'\n- {doc.metadata.get('source', 'Неизвестный источник')}'
 
+            print(f'\n\n\n{answer}\n\n\n')
             # # Получаем историю диалога из памяти
             # chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
             # if chat_history is None:
