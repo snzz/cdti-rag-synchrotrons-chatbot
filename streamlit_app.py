@@ -100,7 +100,7 @@ $$\text{grad} , \phi = \nabla \phi = \left( \frac{\partial \phi}{\partial x}, \f
 где:
             '''
             with st.chat_message('assistant'):
-                st.write(answer)  # Используем st.markdown для отображения формул
+                st.write(test)  # Используем st.markdown для отображения формул
 
             # # Получаем историю диалога из памяти
             # chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
