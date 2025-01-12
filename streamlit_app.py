@@ -39,7 +39,7 @@ system_msg_template = SystemMessagePromptTemplate.from_template(template="""
 Контекст: {context}
 """)
 
-human_msg_template = HumanMessagePromptTemplate.from_template(template="{query}")
+human_msg_template = HumanMessagePromptTemplate.from_template(template="{question}")
 
 prompt_template = ChatPromptTemplate.from_messages(
     [system_msg_template, MessagesPlaceholder(variable_name="history"), human_msg_template]
@@ -79,7 +79,7 @@ with textcontainer:
             with st.chat_message("assistant"):
                 with st.spinner("Печатает..."):
                     response = qa(
-                        {"query": query, "history": st.session_state["history"]}
+                        {"question": query, "chat_history": st.session_state["history"]}
                     )
 
                     answer = response["answer"]
