@@ -17,7 +17,7 @@ def format_math_expressions(text):
     text = re.sub(r'\[\s*(.*?)\s*\]', r' \n$$\1$$\n ', text, flags=re.DOTALL)
     text = re.sub(r'\n(?=.*\$)', '', text)
     # Удаление спец символов
-    re.sub(r'[^\w\s\t\r]*(?=\$[^\$]*$)', '', text)
+    re.sub(r'[^\w\s\t\r\b]*(?=\$[^\$]*$)', '', text)
     re.sub(r'\\\$', r'$', text)
     re.sub(r'\\$', r'$', text)
     re.sub(r'\$', r'$', text)
