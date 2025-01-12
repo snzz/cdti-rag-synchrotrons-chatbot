@@ -94,6 +94,11 @@ with textcontainer:
             for doc in response["source_documents"]:
                 answer += f'\n- {doc.metadata.get('source', 'Неизвестный источник')}'
 
+            test = '''
+            Формула градиента скалярного поля выражается следующим образом:
+$$\text{grad} , \phi = \nabla \phi = \left( \frac{\partial \phi}{\partial x}, \frac{\partial \phi}{\partial y}, \frac{\partial \phi}{\partial z} \right)$$
+где:
+            '''
             with st.chat_message('assistant'):
                 st.write(answer)  # Используем st.markdown для отображения формул
 
