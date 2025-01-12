@@ -95,7 +95,8 @@ with textcontainer:
                 answer += f'\n- {doc.metadata.get('source', 'Неизвестный источник')}'
 
             with st.chat_message('assistant'):
-                st.write(answer)
+                st.markdown(answer)  # Используем st.markdown для отображения формул
+
             # # Получаем историю диалога из памяти
             # chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
             # if chat_history is None:
