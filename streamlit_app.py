@@ -74,37 +74,35 @@ if "history" not in st.session_state:
 
 with textcontainer:
     query = st.text_input("Запрос: ", key="input", placeholder='Введите запрос')
-    if st.button("Отправить"):
-        if query.strip():
-            with st.chat_message("assistant"):
-                with st.spinner("Печатает..."):
-                    response = qa(
-                        {"question": query, "history": st.session_state["history"], "chat_history": st.session_state["history"]}
-                    )
+    if query.strip():
+        with st.spinner("Печатает..."):
+            response = qa(
+                {"question": query, "history": st.session_state["history"], "chat_history": st.session_state["history"]}
+            )
 
-                    answer = utils.format_math_expressions(response["answer"])
-                    # Сохранение вопроса и ответа в контексте
-                    st.session_state["history"].append((query, answer))
+            answer = utils.format_math_expressions(response["answer"])
+            # Сохранение вопроса и ответа в контексте
+            st.session_state["history"].append((query, answer))
 
-                    # Отображение источников
-                    answer += '\n**Источники:**'
-                    for doc in response["source_documents"]:
-                        answer += f'\n- {doc.metadata.get('source', 'Неизвестный источник')}'
+            # Отображение источников
+            answer += '\n**Источники:**'
+            for doc in response["source_documents"]:
+                answer += f'\n- {doc.metadata.get('source', 'Неизвестный источник')}'
 
-                    # # Получаем историю диалога из памяти
-                    # chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
-                    # if chat_history is None:
-                    #     chat_history = []
-                    #
-                    # # Вызываем цепочку с правильными входными данными
-                    # response = qa.invoke(query)['result']
-                    # response = utils.format_math_expressions(response)
-                    #
-                    # # Сохраняем контекст
-                    # st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
+            # # Получаем историю диалога из памяти
+            # chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
+            # if chat_history is None:
+            #     chat_history = []
+            #
+            # # Вызываем цепочку с правильными входными данными
+            # response = qa.invoke(query)['result']
+            # response = utils.format_math_expressions(response)
+            #
+            # # Сохраняем контекст
+            # st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
 
-                st.session_state.requests.append(query)
-                st.session_state.responses.append(answer)
+        st.session_state.requests.append(query)
+        st.session_state.responses.append(answer)
 
 with response_container:
     if st.session_state['responses']:
