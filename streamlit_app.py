@@ -50,45 +50,64 @@ embeddings = OpenAIEmbeddings(
 )
 vectorstore = PineconeVectorStore.from_existing_index(index_name=index_name, embedding=embeddings)
 
-# qa = ConversationalRetrievalChain.from_llm(
+qa = ConversationalRetrievalChain.from_llm(
+    llm=llm,
+    retriever=vectorstore.as_retriever(),
+    return_source_documents=True,
+    verbose=True
+)
+qa.combine_docs_chain.llm_chain.prompt = prompt_template
+
+# qa = RetrievalQA.from_chain_type(
 #     llm=llm,
 #     chain_type='stuff',
-#     memory=st.session_state.buffer_memory,
 #     retriever=vectorstore.as_retriever(),
-#     return_source_documents=True,
-#     combine_docs_chain_kwargs={"prompt": prompt_template},
 # )
-
-qa = RetrievalQA.from_chain_type(
-    llm=llm,
-    chain_type='stuff',
-    retriever=vectorstore.as_retriever(),
-)
 
 # container for chat history
 response_container = st.container()
 # container for text box
 textcontainer = st.container()
 
+if "history" not in st.session_state:
+    st.session_state["history"] = []
+
 with textcontainer:
     query = st.text_input("Запрос: ", key="input", placeholder='Введите запрос')
-    if query.strip():
-        with st.chat_message("assistant"):
-            with st.spinner("Печатает..."):
-                # Получаем историю диалога из памяти
-                chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
-                if chat_history is None:
-                    chat_history = []
+    if st.button("Отправить"):
+        if query.strip():
+            with st.chat_message("assistant"):
+                with st.spinner("Печатает..."):
+                    response = qa(
+                        {"question": query, "chat_history": st.session_state["history"]}
+                    )
 
-                # Вызываем цепочку с правильными входными данными
-                response = qa.invoke(query)['result']
-                response = utils.format_math_expressions(response)
+                    answer = response["answer"]
+                    # Сохранение вопроса и ответа в контексте
+                    st.session_state["history"].append((query, answer))
 
-                # Сохраняем контекст
-                st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
+                    # Отображение ответа
+                    st.write(f"**Ответ:** {answer}")
 
-            st.session_state.requests.append(query)
-            st.session_state.responses.append(response)
+                    # Отображение источников
+                    st.write("**Источники:**")
+                    for doc in response["source_documents"]:
+                        st.write(f"- {doc.metadata.get('source', 'Неизвестный источник')}")
+
+                    # # Получаем историю диалога из памяти
+                    # chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
+                    # if chat_history is None:
+                    #     chat_history = []
+                    #
+                    # # Вызываем цепочку с правильными входными данными
+                    # response = qa.invoke(query)['result']
+                    # response = utils.format_math_expressions(response)
+                    #
+                    # # Сохраняем контекст
+                    # st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
+
+                st.session_state.requests.append(query)
+                st.session_state.responses.append(answer)
 
 with response_container:
     if st.session_state['responses']:
