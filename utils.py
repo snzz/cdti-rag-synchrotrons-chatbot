@@ -14,7 +14,7 @@ index = pc.Index(name='synchrotrons-index', host='https://synchrotrons-index-qds
 
 def format_math_expressions(text):
     # Убираем квадратные скобки и обрамляем содержимое в $ (для выражений на нескольких строках)
-    text = re.sub(r'\[\s*(.*?)\s*\]', r' \n$$\1$$\n ', text, flags=re.DOTALL)
+    text = re.sub(r'\[\s*(.*?)\s*\]', r' \n\$\1\$\n ', text, flags=re.DOTALL)
     text = re.sub(r'\n(?=.*\$)', '', text)
     # Удаление спец символов
     re.sub(r'[^\w\s\t\r\b]*(?=\$[^\$]*$)', '', text)
