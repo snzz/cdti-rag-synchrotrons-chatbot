@@ -29,7 +29,7 @@ if 'requests' not in st.session_state:
 
 os.environ['OPENAI_API_KEY'] = st.secrets["general"]["OPENAI_API_KEY"]
 index_name = 'synchrotrons-index'
-llm = ChatOpenAI(model_name="gpt-4o", temperature=0, max_tokens=4000)
+llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
 
 if 'buffer_memory' not in st.session_state:
     st.session_state.buffer_memory = ConversationBufferWindowMemory(k=3, return_messages=True)
