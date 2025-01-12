@@ -59,12 +59,6 @@ qa = ConversationalRetrievalChain.from_llm(
 )
 qa.combine_docs_chain.llm_chain.prompt = prompt_template
 
-# qa = RetrievalQA.from_chain_type(
-#     llm=llm,
-#     chain_type='stuff',
-#     retriever=vectorstore.as_retriever(),
-# )
-
 # container for chat history
 response_container = st.container()
 # container for text box
@@ -85,6 +79,11 @@ with textcontainer:
                 {"question": query, "history": formatted_history, "chat_history": formatted_history}
             )
 
+            # debug
+            with st.chat_message('assistant'):
+                st.write(response["answer"])
+            #
+            
             answer = utils.format_math_expressions(response["answer"])
             # Сохранение вопроса и ответа в контексте
             st.session_state["history"].append((query, answer))
@@ -97,19 +96,6 @@ with textcontainer:
                 if doc_str not in source_docs:
                     source_docs.append(doc_str)
                     answer += doc_str
-
-            print(f'\n\n\n{answer}\n\n\n')
-            # # Получаем историю диалога из памяти
-            # chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
-            # if chat_history is None:
-            #     chat_history = []
-            #
-            # # Вызываем цепочку с правильными входными данными
-            # response = qa.invoke(query)['result']
-            # response = utils.format_math_expressions(response)
-            #
-            # # Сохраняем контекст
-            # st.session_state.buffer_memory.save_context({"input": query}, {"output": response})
 
         st.session_state.requests.append(query)
         st.session_state.responses.append(answer)
