@@ -2,6 +2,7 @@ import os
 
 from langchain.chains.conversational_retrieval.base import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
+from langchain_core.messages import HumanMessage, AIMessage
 from langchain_pinecone import PineconeVectorStore
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.chains import RetrievalQA
@@ -76,8 +77,12 @@ with textcontainer:
     query = st.text_input("Запрос: ", key="input", placeholder='Введите запрос')
     if query.strip():
         with st.spinner("Печатает..."):
+            formatted_history = [
+                HumanMessage(content=msg[0]) if i % 2 == 0 else AIMessage(content=msg[1])
+                for i, msg in enumerate(st.session_state["history"])
+            ]
             response = qa(
-                {"question": query, "history": st.session_state["history"], "chat_history": st.session_state["history"]}
+                {"question": query, "history": formatted_history, "chat_history": formatted_history}
             )
 
             answer = utils.format_math_expressions(response["answer"])
@@ -85,7 +90,7 @@ with textcontainer:
             st.session_state["history"].append((query, answer))
 
             # Отображение источников
-            answer += '\n**Источники:**'
+            answer += '\n\n**Источники:**'
             for doc in response["source_documents"]:
                 answer += f'\n- {doc.metadata.get('source', 'Неизвестный источник')}'
 
