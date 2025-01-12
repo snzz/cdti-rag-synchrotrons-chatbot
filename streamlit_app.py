@@ -82,17 +82,14 @@ with textcontainer:
                         {"question": query, "history": st.session_state["history"], "chat_history": st.session_state["history"]}
                     )
 
-                    answer = response["answer"]
+                    answer = utils.format_math_expressions(response["answer"])
                     # Сохранение вопроса и ответа в контексте
                     st.session_state["history"].append((query, answer))
 
-                    # Отображение ответа
-                    st.write(f"**Ответ:** {answer}")
-
                     # Отображение источников
-                    st.write("**Источники:**")
+                    answer += '\n**Источники:**'
                     for doc in response["source_documents"]:
-                        st.write(f"- {doc.metadata.get('source', 'Неизвестный источник')}")
+                        answer += f'\n- {doc.metadata.get('source', 'Неизвестный источник')}'
 
                     # # Получаем историю диалога из памяти
                     # chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
