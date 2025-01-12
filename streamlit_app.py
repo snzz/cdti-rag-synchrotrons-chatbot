@@ -90,9 +90,13 @@ with textcontainer:
             st.session_state["history"].append((query, answer))
 
             # Отображение источников
+            source_docs = []
             answer += '\n\n**Источники:**'
             for doc in response["source_documents"]:
-                answer += f'\n- {doc.metadata.get('source', 'Неизвестный источник')}'
+                doc_str = f'\n- {doc.metadata.get('source', 'Неизвестный источник')}'
+                if doc_str not in source_docs:
+                    source_docs.append(doc_str)
+                    answer += doc_str
 
             print(f'\n\n\n{answer}\n\n\n')
             # # Получаем историю диалога из памяти
