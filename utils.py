@@ -14,18 +14,18 @@ index = pc.Index(name='synchrotrons-index', host='https://synchrotrons-index-qds
 
 def format_math_expressions(text):
     # Убираем квадратные скобки и обрамляем содержимое в $ (для выражений на нескольких строках)
-    text = re.sub(r'\[\s*(.*?)\s*\]', r' \n$$\1$$\n ', text, flags=re.DOTALL)
+    text = re.sub(r'\[\s*(.*?)\s*\]', r'\n$\1$\n', text, flags=re.DOTALL)
     text = re.sub(r'\n(?=.*\$)', '', text)
 
     text = re.sub(r'\\\$', r'$', text)
     text = re.sub(r'\\\$', r'$', text)
-    text = re.sub(r'\\\$', '$', text)
+    text = re.sub(r'\\\$', r'$', text)
     text = re.sub(r'\\$', r'$', text)
     text = re.sub(r'\\$', r'$', text)
-    text = re.sub(r'\\$', '$', text)
+    text = re.sub(r'\\$', r'$', text)
     text = re.sub(r'\$', r'$', text)
     text = re.sub(r'\$', r'$', text)
-    text = re.sub(r'\$', '$', text)
+    text = re.sub(r'\$', r'$', text)
     # # Удаление спец символов
     # text = re.sub(r'[^\w\s\t\r\b]*(?=\$[^\$]*$)', '', text)
     # Убираем пробелы перед и после $ внутри формулы, только если пробелы стоят до или после символов $
