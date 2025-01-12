@@ -79,7 +79,7 @@ with textcontainer:
             with st.chat_message("assistant"):
                 with st.spinner("Печатает..."):
                     response = qa(
-                        {"question": query, "chat_history": st.session_state["history"]}
+                        {"query": query, "history": st.session_state["history"]}
                     )
 
                     answer = response["answer"]
