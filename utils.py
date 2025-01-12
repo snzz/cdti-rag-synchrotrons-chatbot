@@ -19,6 +19,8 @@ def format_math_expressions(text):
     # Удаление спец символов
     re.sub(r'[^\w\s\t\r]*(?=\$[^\$]*$)', '', text)
     re.sub(r'\\\$', r'$', text)
+    re.sub(r'\\$', r'$', text)
+    re.sub(r'\$', r'$', text)
     # Убираем пробелы перед и после $ внутри формулы, только если пробелы стоят до или после символов $
     text = re.sub(r'\s*\$(.*?)\s*\$', r'$\1$', text)
     text = re.sub(r'\s+\$(?=\S)', '$', text)

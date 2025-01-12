@@ -94,14 +94,6 @@ with textcontainer:
             for doc in response["source_documents"]:
                 answer += f'\n- {doc.metadata.get('source', 'Неизвестный источник')}'
 
-            test = '''
-            Формула градиента скалярного поля выражается следующим образом:
-$$\\text{grad} , \\phi = \\nabla \\phi = \\left( \\frac{\\partial \\phi}{\\partial x}, \\frac{\\partial \\phi}{\\partial y}, \\frac{\\partial \\phi}{\\partial z} \\right)$$
-где:
-            '''
-            with st.chat_message('assistant'):
-                st.write(test)  # Используем st.markdown для отображения формул
-
             # # Получаем историю диалога из памяти
             # chat_history = st.session_state.buffer_memory.load_memory_variables({}).get('history', [])
             # if chat_history is None:
