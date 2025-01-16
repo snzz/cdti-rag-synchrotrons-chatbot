@@ -77,6 +77,8 @@ if new_name != selected_option:
 # Отображаем обновленный ComboBox с новым списком
 selected_option = st.selectbox('Choose an option:', options)
 
+st.text_area('Стандартный промпт ассистента')
+
 st.subheader('Чат')
 # container for chat history
 response_container = st.container()
