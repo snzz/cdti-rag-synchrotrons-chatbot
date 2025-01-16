@@ -59,6 +59,8 @@ qa = ConversationalRetrievalChain.from_llm(
 )
 qa.combine_docs_chain.llm_chain.prompt = prompt_template
 
+
+selected_color = st.selectbox("Выберите профиль", ['профиль 1', 'профиль 2'])
 # container for chat history
 response_container = st.container()
 # container for text box
