@@ -60,7 +60,23 @@ qa = ConversationalRetrievalChain.from_llm(
 qa.combine_docs_chain.llm_chain.prompt = prompt_template
 
 
-selected_color = st.selectbox("Выберите профиль", ['профиль 1', 'профиль 2'])
+# Исходный список значений для ComboBox
+options = ['Option 1', 'Option 2', 'Option 3']
+
+# Выбор элемента в ComboBox
+selected_option = st.selectbox('Choose an option to rename:', options)
+
+# Ввод нового имени для выбранного элемента
+new_name = st.text_input('Enter new name for the selected option:', value=selected_option)
+
+# Если пользователь изменяет название
+if new_name != selected_option:
+    # Обновляем список, заменяя старое значение на новое
+    options[options.index(selected_option)] = new_name
+
+# Отображаем обновленный ComboBox с новым списком
+selected_option = st.selectbox('Choose an option:', options)
+
 # container for chat history
 response_container = st.container()
 # container for text box
