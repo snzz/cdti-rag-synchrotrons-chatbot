@@ -19,6 +19,7 @@ from streamlit_chat import message
 import utils
 from utils import *
 import firestore
+import firebase_admin
 from firestore import *
 
 
