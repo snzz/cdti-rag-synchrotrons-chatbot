@@ -19,6 +19,7 @@ from streamlit_chat import message
 import utils
 from utils import *
 
+
 st.subheader("Ассистент по теме 'Синхротроны'")
 
 if 'responses' not in st.session_state:
@@ -59,25 +60,25 @@ qa = ConversationalRetrievalChain.from_llm(
 )
 qa.combine_docs_chain.llm_chain.prompt = prompt_template
 
+with st.expander("Параметры чата"):
+    # Исходный список значений для ComboBox
+    options = ['Option 1', 'Option 2', 'Option 3']
 
-# Исходный список значений для ComboBox
-options = ['Option 1', 'Option 2', 'Option 3']
+    # Выбор элемента в ComboBox
+    selected_option = st.selectbox('Choose an option to rename:', options)
 
-# Выбор элемента в ComboBox
-selected_option = st.selectbox('Choose an option to rename:', options)
+    # Ввод нового имени для выбранного элемента
+    new_name = st.text_input('Enter new name for the selected option:', value=selected_option)
 
-# Ввод нового имени для выбранного элемента
-new_name = st.text_input('Enter new name for the selected option:', value=selected_option)
+    # Если пользователь изменяет название
+    if new_name != selected_option:
+        # Обновляем список, заменяя старое значение на новое
+        options[options.index(selected_option)] = new_name
 
-# Если пользователь изменяет название
-if new_name != selected_option:
-    # Обновляем список, заменяя старое значение на новое
-    options[options.index(selected_option)] = new_name
+    # Отображаем обновленный ComboBox с новым списком
+    selected_option = st.selectbox('Choose an option:', options)
 
-# Отображаем обновленный ComboBox с новым списком
-selected_option = st.selectbox('Choose an option:', options)
-
-st.text_area('Стандартный промпт ассистента')
+    st.text_area('Стандартный промпт ассистента')
 
 st.subheader('Чат')
 # container for chat history
