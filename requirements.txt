@@ -8,3 +8,4 @@ sentence-transformers
 pinecone
 langchain_openai
 langchain_pinecone
+firebase_admin
