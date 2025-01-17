@@ -18,6 +18,7 @@ from streamlit_chat import message
 
 import utils
 from utils import *
+import firestore
 from firestore import *
 
 
