@@ -64,7 +64,6 @@ qa.combine_docs_chain.llm_chain.prompt = prompt_template
 ### НАСТРОЙКА LLM
 
 curr_user_email = st.experimental_user.email
-user_profiles = get_user_profiles(user_id='')
 if curr_user_email == 'ikulakov013@gmail.com':
     st.success('test')
 
