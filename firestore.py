@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 import firebase_admin
 import streamlit as st
 from firebase_admin import credentials, firestore
@@ -10,7 +12,7 @@ firebase_admin.initialize_app(fs_cred)
 fs = firestore.client()
 
 
-def add_user_profile(user_id, profile_name, message_history, context) -> bool:
+def update_user_profile(user_id, profile_name, message_history) -> bool:
     # Создаем документ для пользователя в коллекции 'users'
     user_ref = fs.collection("users").document(user_id)
     # Добавляем подколлекцию 'profiles' для данного пользователя
@@ -22,7 +24,6 @@ def add_user_profile(user_id, profile_name, message_history, context) -> bool:
         profile_data = {
             "profile_name": profile_name,
             "message_history": message_history,
-            "context": context
         }
         # Запись данных в Firestore
         profile_ref.set(profile_data)
@@ -45,4 +46,3 @@ def get_user_profiles(user_id):
         profiles_list.append(profile_data)
 
     return profiles_list
-

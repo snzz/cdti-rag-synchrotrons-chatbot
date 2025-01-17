@@ -18,6 +18,7 @@ from streamlit_chat import message
 
 import utils
 from utils import *
+from firestore import *
 
 
 st.subheader("Ассистент по теме 'Синхротроны'")
@@ -28,6 +29,7 @@ if 'responses' not in st.session_state:
 if 'requests' not in st.session_state:
     st.session_state['requests'] = []
 
+### НАСТРОЙКА LLM
 os.environ['OPENAI_API_KEY'] = st.secrets["general"]["OPENAI_API_KEY"]
 index_name = 'synchrotrons-index'
 llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
@@ -59,6 +61,12 @@ qa = ConversationalRetrievalChain.from_llm(
     verbose=True
 )
 qa.combine_docs_chain.llm_chain.prompt = prompt_template
+### НАСТРОЙКА LLM
+
+curr_user_email = st.experimental_user.email
+user_profiles = get_user_profiles(user_id='')
+if curr_user_email == 'ikulakov013@gmail.com':
+    st.success('test')
 
 with st.expander("Параметры чата"):
     # Исходный список значений для ComboBox
