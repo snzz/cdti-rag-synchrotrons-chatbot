@@ -10,15 +10,13 @@ from firebase_admin import credentials, firestore
 fs_cred_str: str = st.secrets["general"]["FIRESTORE_CREDENTIALS"]
 # Ординарные кавычки на двойные
 fs_cred_str = re.sub(r"'", '"', fs_cred_str)
-
-fs_cred_json = json.loads(fs_cred_str)
 cred_json_file_path = Path('credentials.json')
 
 if not cred_json_file_path.exists():
-    with open('credentials.json', 'w') as json_file:
-        json.dump(fs_cred_json, json_file, indent=4)
+    with open(cred_json_file_path, 'w') as f:
+        f.write(fs_cred_str)
 
-fs_cert = credentials.Certificate(cert='credentials.json')
+fs_cert = credentials.Certificate(cert=cred_json_file_path)
 firebase_admin.initialize_app(fs_cert)
 fs = firestore.client()
 
