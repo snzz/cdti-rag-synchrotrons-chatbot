@@ -8,9 +8,12 @@ import streamlit as st
 from firebase_admin import credentials, firestore
 
 fs_cred_str: str = st.secrets["general"]["FIRESTORE_CREDENTIALS"]
+st.write(fs_cred_str)
 # Доп обработка json credentials
 fs_cred_str = re.sub(r"'", '"', fs_cred_str)
 fs_cred_str = re.sub(r'\\', '\\\\', fs_cred_str)
+st.write(fs_cred_str)
+
 cred_json_file_path = Path('credentials.json')
 
 if not cred_json_file_path.exists():
