@@ -66,28 +66,19 @@ qa.combine_docs_chain.llm_chain.prompt = prompt_template
 ### НАСТРОЙКА LLM
 
 curr_user_email = st.experimental_user.email
-if curr_user_email == 'ikulakov013@gmail.com':
-    st.success('test')
+user_profiles = get_user_profiles(user_id=curr_user_email)
+if len(user_profiles) == 0:
+    user_profiles.append(
+        {
+            "profile_name": 'Новый профиль',
+            "message_history": '',
+        }
+    )
 
 with st.expander("Параметры чата"):
-    # Исходный список значений для ComboBox
-    options = ['Option 1', 'Option 2', 'Option 3']
-
     # Выбор элемента в ComboBox
-    selected_option = st.selectbox('Choose an option to rename:', options)
-
-    # Ввод нового имени для выбранного элемента
-    new_name = st.text_input('Enter new name for the selected option:', value=selected_option)
-
-    # Если пользователь изменяет название
-    if new_name != selected_option:
-        # Обновляем список, заменяя старое значение на новое
-        options[options.index(selected_option)] = new_name
-
-    # Отображаем обновленный ComboBox с новым списком
-    selected_option = st.selectbox('Choose an option:', options)
-
-    st.text_area('Стандартный промпт ассистента')
+    profiles_sb = st.selectbox('Выберите чата:', user_profiles)
+    default_prompt_str = st.text_area('Стандартный промпт ассистента')
 
 st.subheader('Чат')
 # container for chat history

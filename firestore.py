@@ -2,6 +2,7 @@ import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import firebase_admin
 import streamlit as st
@@ -43,7 +44,7 @@ def update_user_profile(user_id, profile_name, message_history) -> bool:
     return False
 
 
-def get_user_profiles(user_id):
+def get_user_profiles(user_id) -> [Any]:
     # Получаем ссылку на коллекцию 'profiles' конкретного пользователя
     user_ref = fs.collection("users").document(user_id)
     profiles_ref = user_ref.collection("profiles")
