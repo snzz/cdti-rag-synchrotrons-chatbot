@@ -20,7 +20,7 @@ from firebase_admin import credentials, firestore
 #     with open(cred_json_file_path, 'w') as f:
 #         f.write(fs_cred_str)
 
-fs_cert = credentials.Certificate(cert='credentials.json')
+fs_cert = credentials.Certificate('credentials.json')
 firebase_admin.initialize_app(fs_cert)
 fs = firestore.client()
 
