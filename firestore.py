@@ -26,10 +26,9 @@ except Exception as exc:
     fs_cert = credentials.Certificate('cdti-rag-synchrotrons-firebase-adminsdk-7jfem-57151483b0.json')
     firebase_admin.initialize_app(fs_cert, name='cdti-rag-app')
 
-fs = firestore.client()
-
 
 def update_user_profile(user_id, profile_name, message_history) -> bool:
+    fs = firestore.client()
     # Создаем документ для пользователя в коллекции 'users'
     user_ref = fs.collection("users").document(user_id)
     # Добавляем подколлекцию 'profiles' для данного пользователя
@@ -49,6 +48,7 @@ def update_user_profile(user_id, profile_name, message_history) -> bool:
 
 
 def get_user_profiles(user_id) -> [Any]:
+    fs = firestore.client()
     # Получаем ссылку на коллекцию 'profiles' конкретного пользователя
     user_ref = fs.collection("users").document(user_id)
     profiles_ref = user_ref.collection("profiles")
