@@ -7,19 +7,19 @@ import firebase_admin
 import streamlit as st
 from firebase_admin import credentials, firestore
 
-fs_cred_str: str = st.secrets["general"]["FIRESTORE_CREDENTIALS"]
+# fs_cred_str: str = st.secrets["general"]["FIRESTORE_CREDENTIALS"]
+#
+# # Доп обработка json credentials
+# fs_cred_str = re.sub(r"'", '"', fs_cred_str)
+# fs_cred_str = re.sub(r'[\f\n\r\t\v]', '', fs_cred_str)
+#
+# cred_json_file_path = Path('credentials.json')
+#
+# if not cred_json_file_path.exists():
+#     with open(cred_json_file_path, 'w') as f:
+#         f.write(fs_cred_str)
 
-# Доп обработка json credentials
-fs_cred_str = re.sub(r"'", '"', fs_cred_str)
-fs_cred_str = re.sub(r'[\f\n\r\t\v]', '', fs_cred_str)
-
-cred_json_file_path = Path('credentials.json')
-
-if not cred_json_file_path.exists():
-    with open(cred_json_file_path, 'w') as f:
-        f.write(fs_cred_str)
-
-fs_cert = credentials.Certificate('credentials.json')
+fs_cert = credentials.Certificate('cdti-rag-synchrotrons-firebase-adminsdk-7jfem-57151483b0.json')
 firebase_admin.initialize_app(fs_cert)
 fs = firestore.client()
 
