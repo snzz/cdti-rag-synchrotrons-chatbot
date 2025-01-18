@@ -20,8 +20,9 @@ from firebase_admin import credentials, firestore
 #     with open(cred_json_file_path, 'w') as f:
 #         f.write(fs_cred_str)
 
-fs_cert = credentials.Certificate('cdti-rag-synchrotrons-firebase-adminsdk-7jfem-57151483b0.json')
-firebase_admin.initialize_app(fs_cert)
+if not firebase_admin.get_app('cdti-rag-app'):
+    fs_cert = credentials.Certificate('cdti-rag-synchrotrons-firebase-adminsdk-7jfem-57151483b0.json')
+    firebase_admin.initialize_app(fs_cert, name='cdti-rag-app')
 fs = firestore.client()
 
 
