@@ -1,4 +1,5 @@
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -7,6 +8,8 @@ import streamlit as st
 from firebase_admin import credentials, firestore
 
 fs_cred_str: str = st.secrets["general"]["FIRESTORE_CREDENTIALS"]
+# Ординарные кавычки на двойные
+fs_cred_str = re.sub(r"'", '"', fs_cred_str)
 
 fs_cred_json = json.loads(fs_cred_str)
 cred_json_file_path = Path('credentials.json')
