@@ -7,20 +7,20 @@ import firebase_admin
 import streamlit as st
 from firebase_admin import credentials, firestore
 
-fs_cred_str: str = st.secrets["general"]["FIRESTORE_CREDENTIALS"]
+# fs_cred_str: str = st.secrets["general"]["FIRESTORE_CREDENTIALS"]
+#
+# # Доп обработка json credentials
+# fs_cred_str = re.sub(r"'", '"', fs_cred_str)
+# fs_cred_str = fs_cred_str.replace("\n", "\\n")
+#
+#
+# cred_json_file_path = Path('credentials.json')
+#
+# if not cred_json_file_path.exists():
+#     with open(cred_json_file_path, 'w') as f:
+#         f.write(fs_cred_str)
 
-# Доп обработка json credentials
-fs_cred_str = re.sub(r"'", '"', fs_cred_str)
-fs_cred_str = fs_cred_str.replace("\n", "\\n")
-
-
-cred_json_file_path = Path('credentials.json')
-
-if not cred_json_file_path.exists():
-    with open(cred_json_file_path, 'w') as f:
-        f.write(fs_cred_str)
-
-fs_cert = credentials.Certificate(cert=cred_json_file_path)
+fs_cert = credentials.Certificate(cert='credentials.json')
 firebase_admin.initialize_app(fs_cert)
 fs = firestore.client()
 
