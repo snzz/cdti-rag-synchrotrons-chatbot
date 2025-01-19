@@ -53,10 +53,13 @@ def get_user_profiles(user_id) -> [Any]:
     user_ref = fs.collection("users").document(user_id)
     profiles_ref = user_ref.collection("profiles")
 
-    user_ref = fs.collection('users').add({
-        'name': 'John Doe',
-        'age': 30
-    })
+    user_ref = fs.collection('users').add(
+        document_id='test_doc',
+        document_data={
+            'name': 'John Doe',
+            'age': 30
+        }
+    )
 
     # Получаем все документы в подколлекции 'profiles'
     profiles = profiles_ref.stream()
