@@ -1,4 +1,5 @@
 import os
+import uuid
 
 from langchain.chains.conversational_retrieval.base import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
@@ -16,11 +17,25 @@ from langchain.prompts import (
 import streamlit as st
 from streamlit_chat import message
 
+import mongodb
 import utils
 from utils import *
-import firestore
-import firebase_admin
-from firestore import *
+
+
+def on_add_profile_btn_click():
+    pass
+
+
+def on_delete_profile_btn_click():
+    pass
+
+
+def on_change_profile_name_btn_click():
+    pass
+
+
+def on_change_profiles_sb():
+    pass
 
 
 st.subheader("Ассистент по теме 'Синхротроны'")
@@ -66,18 +81,32 @@ qa.combine_docs_chain.llm_chain.prompt = prompt_template
 ### НАСТРОЙКА LLM
 
 curr_user_email = st.experimental_user.email
-user_profiles = get_user_profiles(user_id=curr_user_email)
+users_collection = mongodb.get_users_collection()
+curr_user = mongodb.get_user_data_by_email(users_collection, curr_user_email)
+if not curr_user:
+    curr_user = mongodb.add_user(users_collection, curr_user_email)
+
+user_profiles = curr_user['profiles']
+
 if len(user_profiles) == 0:
     user_profiles.append(
         {
-            "profile_name": 'Новый профиль',
-            "message_history": '',
+            "id": str(uuid.uuid4()),
+            "name": "Новый профиль",
+            "messages": []
         }
     )
 
+prof_col1, prof_col2, prof_col3, prof_col4 = st.columns(4)
+profiles_sb = prof_col1.selectbox(label='Выберите чата:', options=map(lambda p: p.name, user_profiles),
+                                  on_change=on_change_profiles_sb)
+
+prof_col2.button(label='Добавить', on_click=on_add_profile_btn_click)
+prof_col3.button(label='Изменить', on_click=on_change_profile_name_btn_click)
+prof_col4.button(label='Удалить', on_click=on_delete_profile_btn_click, disabled=len(user_profiles) == 0)
+
 with st.expander("Параметры чата"):
     # Выбор элемента в ComboBox
-    profiles_sb = st.selectbox('Выберите чата:', user_profiles)
     default_prompt_str = st.text_area('Стандартный промпт ассистента')
 
 st.subheader('Чат')
@@ -101,11 +130,6 @@ with textcontainer:
                 {"question": query, "history": formatted_history, "chat_history": formatted_history}
             )
 
-            # # debug
-            # with st.chat_message('assistant'):
-            #     st.write(response["answer"])
-            # #
-
             answer = utils.format_math_expressions(response["answer"])
             # Сохранение вопроса и ответа в контексте
             st.session_state["history"].append((query, answer))
@@ -128,3 +152,4 @@ with response_container:
             message(st.session_state['responses'][i], key=str(i))
             if i < len(st.session_state['requests']):
                 message(st.session_state["requests"][i], is_user=True, key=str(i) + '_user')
+
