@@ -9,4 +9,4 @@ pinecone
 langchain_openai
 langchain_pinecone
 firebase_admin
-pymongo[srv]==3.12
+pymongo
