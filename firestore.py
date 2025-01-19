@@ -23,7 +23,7 @@ from firebase_admin import credentials, firestore
 try:
     firebase_admin.get_app('cdti-rag-app')
 except Exception as exc:
-    fs_cert = credentials.Certificate('cdti-rag-synchrotrons-firebase-adminsdk-7jfem-57151483b0.json')
+    fs_cert = credentials.Certificate('cdti-rag-synchrotrons-firebase-adminsdk-7jfem-dff3d2e7ce.json')
     firebase_admin.initialize_app(fs_cert, name='cdti-rag-app')
 
 
