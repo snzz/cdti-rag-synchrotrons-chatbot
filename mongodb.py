@@ -1,3 +1,4 @@
+import ssl
 import pymongo
 import streamlit as st
 import uuid
@@ -5,7 +6,7 @@ import uuid
 
 def get_users_collection():
     connection_string = st.secrets["general"]["MONGODB_ATLAS_CONNECTION_STRING"]
-    client = pymongo.MongoClient(**connection_string)
+    client = pymongo.MongoClient(**connection_string, ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
     db = client.RAGSynchrotrons
     collection = db.Users
     return collection
