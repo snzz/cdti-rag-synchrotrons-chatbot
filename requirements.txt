@@ -9,5 +9,5 @@ pinecone
 langchain_openai
 langchain_pinecone
 firebase_admin
-pymongo==4.6.3
+pymongo==4.10.1
 certifi
