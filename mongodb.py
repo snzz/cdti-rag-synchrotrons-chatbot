@@ -1,16 +1,13 @@
-import ssl
 import pymongo
-import certifi
 import streamlit as st
 import uuid
 
 
 def get_users_collection():
-    ca = certifi.where()
     connection_string = st.secrets["general"]["MONGODB_ATLAS_CONNECTION_STRING"]
-    client = pymongo.MongoClient(connection_string, tlsCAFile=ca, ssl_cert_reqs=ssl.CERT_NONE)
-    db = client['streamlit-chat-bot-db']
-    collection = db['users']
+    client = pymongo.MongoClient(**connection_string)
+    db = client.RAGSynchrotrons
+    collection = db.Users
     return collection
 
 
