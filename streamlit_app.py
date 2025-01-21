@@ -99,7 +99,7 @@ if not curr_user:
 if len(curr_user.profiles) == 0:
     curr_user.profiles.append(sqlite.Profile(id=uuid.uuid4(), name='Новый профиль', messages=[]))
 
-user_profiles_cb_values = map(lambda p: p.name, curr_user.profiles)
+user_profiles_cb_values = map(lambda cup: cup, curr_user.profiles)
 prof_col1, prof_col2, prof_col3, prof_col4 = st.columns(4)
 profiles_sb = prof_col1.selectbox(label='Выберите чата:', options=map(lambda p: p.name, user_profiles_cb_values),
                                   on_change=on_change_profiles_sb)
