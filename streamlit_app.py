@@ -100,14 +100,17 @@ if len(curr_user.profiles) == 0:
     curr_user.profiles.append(sqlite.Profile(id=uuid.uuid4(), name='Новый профиль', messages=[]))
 
 user_profiles_cb_values = map(lambda cup: cup.name, curr_user.profiles)
-prof_col1, prof_col2, prof_col3 = st.columns(3)
 profiles_sb = st.selectbox(label='Выберите чата:',
-                                  options=user_profiles_cb_values,
-                                  on_change=on_change_profiles_sb)
+                           options=user_profiles_cb_values,
+                           on_change=on_change_profiles_sb)
 
-prof_col1.button(label='Добавить', on_click=on_add_profile_btn_click)
-prof_col2.button(label='Изменить', on_click=on_change_profile_name_btn_click)
-prof_col3.button(label='Удалить', on_click=on_delete_profile_btn_click, disabled=len(curr_user.profiles) == 0)
+prof_col1, prof_col2, prof_col3 = st.columns(3)
+prof_col1.button(label='Добавить', use_container_width=True,
+                 on_click=on_add_profile_btn_click)
+prof_col2.button(label='Изменить', use_container_width=True,
+                 on_click=on_change_profile_name_btn_click)
+prof_col3.button(label='Удалить', use_container_width=True,
+                 on_click=on_delete_profile_btn_click, disabled=len(curr_user.profiles) == 0)
 
 with st.expander("Параметры чата"):
     # Выбор элемента в ComboBox
@@ -156,4 +159,3 @@ with response_container:
             message(st.session_state['responses'][i], key=str(i))
             if i < len(st.session_state['requests']):
                 message(st.session_state["requests"][i], is_user=True, key=str(i) + '_user')
-
