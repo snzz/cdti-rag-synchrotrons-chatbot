@@ -81,7 +81,7 @@ def get_users() -> [User]:
 
     users = []
     for row in rows:
-        user = User(id=row[0], email=row[1], profiles=row[2])
+        user = User(id=row[0], email=row[1], profiles=pickle.loads(row[2]))
         users.append(user)
     return users
 
