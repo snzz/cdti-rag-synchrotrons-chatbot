@@ -62,9 +62,9 @@ def get_user(user_id: int) -> User | None:
     conn.close()
 
     if row:
-        user_id = row['id']
-        user_email = row['email']
-        serialized_data = row['profiles']
+        user_id = row[0]            # id
+        user_email = row[1]         # email
+        serialized_data = row[2]    # profiles
         profiles = pickle.loads(serialized_data)
         user = User(id=user_id, email=user_email, profiles=profiles)
         return user
@@ -81,7 +81,7 @@ def get_users() -> [User]:
 
     users = []
     for row in rows:
-        user = User(id=row['id'], email=row['email'], profiles=row['profiles'])
+        user = User(id=row[0], email=row[1], profiles=row[2])
         users.append(user)
     return users
 
