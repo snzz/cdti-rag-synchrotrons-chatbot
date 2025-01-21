@@ -105,16 +105,14 @@ profiles_sb = st.selectbox(label='Выберите профиль:',
                            on_change=on_change_profiles_sb)
 
 st.text_input('Введите название профиля')
-prof_name_col1, prof_name_col2 = st.columns([0.7, 0.3])
+prof_name_col1, prof_name_col2 = st.columns(2)
 prof_name_col1.button(label='Добавить', use_container_width=True, icon='➕', on_click=on_add_profile_btn_click)
 prof_name_col2.button(label='Изменить название текущего профиля', use_container_width=True, icon='✍🏻',
                       on_click=on_change_profile_name_btn_click)
 
-st.divider()
 st.button(label='Удалить', use_container_width=True, icon='❌',
           on_click=on_delete_profile_btn_click,
           disabled=len(curr_user.profiles) == 0)
-st.divider()
 
 with st.expander("Параметры чата"):
     # Выбор элемента в ComboBox
