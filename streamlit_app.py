@@ -80,8 +80,10 @@ qa = ConversationalRetrievalChain.from_llm(
 qa.combine_docs_chain.llm_chain.prompt = prompt_template
 ### НАСТРОЙКА LLM
 
-#db
+# db
 conn = sqlite.connect_to_db()
+sqlite.init_users_table()
+#
 
 curr_user_email = st.experimental_user.email
 users_collection = sqlite.get_users()
