@@ -17,7 +17,7 @@ from langchain.prompts import (
 import streamlit as st
 from streamlit_chat import message
 
-import mongodb
+import sqlite
 import utils
 from utils import *
 
@@ -80,25 +80,28 @@ qa = ConversationalRetrievalChain.from_llm(
 qa.combine_docs_chain.llm_chain.prompt = prompt_template
 ### НАСТРОЙКА LLM
 
-curr_user_email = st.experimental_user.email
-users_collection = mongodb.get_users_collection()
-curr_user = mongodb.get_user_data_by_email(users_collection, curr_user_email)
-if not curr_user:
-    curr_user = mongodb.add_user(users_collection, curr_user_email)
+#db
+conn = sqlite.connect_to_db()
 
-user_profiles = curr_user['profiles']
+curr_user_email = st.experimental_user.email
+users_collection = sqlite.get_users()
+curr_user = None
+for user in users_collection:
+    if user.email == curr_user_email:
+        curr_user = user
+        break
+
+if not curr_user:
+    curr_user = sqlite.add_user(email=curr_user_email, profiles=[])
+
+user_profiles: [sqlite.ProfileInfo] = curr_user['profiles']
 
 if len(user_profiles) == 0:
-    user_profiles.append(
-        {
-            "id": str(uuid.uuid4()),
-            "name": "Новый профиль",
-            "messages": []
-        }
-    )
+    user_profiles.append(sqlite.ProfileInfo(id=uuid.uuid4(), name='Новый профиль', messages=[]))
 
+user_profiles_cb_values = map(lambda p: p.name, user_profiles)
 prof_col1, prof_col2, prof_col3, prof_col4 = st.columns(4)
-profiles_sb = prof_col1.selectbox(label='Выберите чата:', options=map(lambda p: p.name, user_profiles),
+profiles_sb = prof_col1.selectbox(label='Выберите чата:', options=map(lambda p: p.name, user_profiles_cb_values),
                                   on_change=on_change_profiles_sb)
 
 prof_col2.button(label='Добавить', on_click=on_add_profile_btn_click)
