@@ -92,7 +92,7 @@ for user in users_collection:
     if user.email == curr_user_email:
         curr_user = user
         break
-
+st.write(curr_user.profiles)
 if not curr_user:
     curr_user = sqlite.add_user(email=curr_user_email, profiles=[])
 
