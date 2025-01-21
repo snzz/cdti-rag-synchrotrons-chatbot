@@ -96,7 +96,7 @@ for user in users_collection:
 if not curr_user:
     curr_user = sqlite.add_user(email=curr_user_email, profiles=[])
 
-user_profiles: [sqlite.ProfileInfo] = curr_user['profiles']
+user_profiles: [sqlite.ProfileInfo] = curr_user.profiles
 
 if len(user_profiles) == 0:
     user_profiles.append(sqlite.ProfileInfo(id=uuid.uuid4(), name='Новый профиль', messages=[]))
