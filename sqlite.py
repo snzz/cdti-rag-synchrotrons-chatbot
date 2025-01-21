@@ -9,7 +9,7 @@ db_name = 'cdti_rag_db.db'
 
 
 @dataclass
-class ProfileInfo:
+class Profile:
     id: uuid.UUID
     name: str
     messages: [str]
@@ -19,7 +19,7 @@ class ProfileInfo:
 class User:
     id: int | None
     email: str
-    profiles: [ProfileInfo]
+    profiles: [Profile]
 
 
 def connect_to_db() -> Any:
@@ -41,7 +41,7 @@ def init_users_table():
     conn.close()
 
 
-def add_user(email: str, profiles: [ProfileInfo]) -> User:
+def add_user(email: str, profiles: [Profile]) -> User:
     serialized_data = pickle.dumps(profiles)
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
@@ -86,7 +86,7 @@ def get_users() -> [User]:
     return users
 
 
-def update_user_profiles(user_id: int, profiles: [ProfileInfo]):
+def update_user_profiles(user_id: int, profiles: [Profile]):
     user = get_user(user_id)
     if user:
         user.profiles = profiles

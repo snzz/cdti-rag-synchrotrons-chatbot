@@ -97,7 +97,7 @@ if not curr_user:
     curr_user = sqlite.add_user(email=curr_user_email, profiles=[])
 
 if len(curr_user.profiles) == 0:
-    curr_user.profiles.append(sqlite.ProfileInfo(id=uuid.uuid4(), name='Новый профиль', messages=[]))
+    curr_user.profiles.append(sqlite.Profile(id=uuid.uuid4(), name='Новый профиль', messages=[]))
 
 user_profiles_cb_values = map(lambda p: p.name, curr_user.profiles)
 prof_col1, prof_col2, prof_col3, prof_col4 = st.columns(4)
