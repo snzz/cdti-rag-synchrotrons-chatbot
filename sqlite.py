@@ -19,7 +19,7 @@ class ProfileInfo:
 class User:
     id: int | None
     email: str
-    profiles: [Any]
+    profiles: [ProfileInfo]
 
 
 def connect_to_db() -> Any:
