@@ -92,7 +92,7 @@ for user in users_collection:
     if user.email == curr_user_email:
         curr_user = user
         break
-st.write(curr_user.profiles)
+st.write(curr_user)
 if not curr_user:
     curr_user = sqlite.add_user(email=curr_user_email, profiles=[])
 
@@ -100,14 +100,14 @@ if len(curr_user.profiles) == 0:
     curr_user.profiles.append(sqlite.Profile(id=uuid.uuid4(), name='Новый профиль', messages=[]))
 
 user_profiles_cb_values = map(lambda cup: cup.name, curr_user.profiles)
-prof_col1, prof_col2, prof_col3, prof_col4 = st.columns(4)
-profiles_sb = prof_col1.selectbox(label='Выберите чата:',
+prof_col1, prof_col2, prof_col3 = st.columns(3)
+profiles_sb = st.selectbox(label='Выберите чата:',
                                   options=user_profiles_cb_values,
                                   on_change=on_change_profiles_sb)
 
-prof_col2.button(label='Добавить', on_click=on_add_profile_btn_click)
-prof_col3.button(label='Изменить', on_click=on_change_profile_name_btn_click)
-prof_col4.button(label='Удалить', on_click=on_delete_profile_btn_click, disabled=len(curr_user.profiles) == 0)
+prof_col1.button(label='Добавить', on_click=on_add_profile_btn_click)
+prof_col2.button(label='Изменить', on_click=on_change_profile_name_btn_click)
+prof_col3.button(label='Удалить', on_click=on_delete_profile_btn_click, disabled=len(curr_user.profiles) == 0)
 
 with st.expander("Параметры чата"):
     # Выбор элемента в ComboBox
