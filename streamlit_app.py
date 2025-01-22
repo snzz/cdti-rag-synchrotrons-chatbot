@@ -97,35 +97,51 @@ if not curr_user:
     curr_user = sqlite.add_user(email=curr_user_email, profiles=[])
 
 if len(curr_user.profiles) == 0:
-    curr_user.profiles.append(sqlite.Profile(id=uuid.uuid4(), name='Новый профиль', messages=[]))
+    curr_user.profiles.append(sqlite.Profile(id=uuid.uuid4(), name='Новый профиль', history=[], responses=[],
+                                             requests=[], prompt=system_msg_template))
+    sqlite.update_user(user=curr_user)
 
-user_profiles_cb_values = map(lambda cup: cup.name, curr_user.profiles)
-profiles_sb = st.selectbox(label='Выберите профиль:',
-                           options=user_profiles_cb_values,
-                           on_change=on_change_profiles_sb)
+user_profiles_cb_values = map(lambda p: p.name, curr_user.profiles)
+profiles_sb = st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values, on_change=on_change_profiles_sb)
 
-st.text_input('Введите название профиля')
-prof_name_col1, prof_name_col2 = st.columns(2)
-prof_name_col1.button(label='Добавить', use_container_width=True, icon='➕', on_click=on_add_profile_btn_click)
-prof_name_col2.button(label='Изменить название текущего профиля', use_container_width=True, icon='✍🏻',
-                      on_click=on_change_profile_name_btn_click)
+with profiles_sb:
+    for profile in curr_user.profiles:
+        if profile.name == profiles_sb:
+            st.session_state["history"] = profile['history']
+            st.session_state['responses'] = profile['responses']
+            st.session_state['requests'] = profile['requests']
+            st.session_state['prompt'] = profile['prompt']
 
-st.button(label='Удалить', use_container_width=True, icon='❌',
-          on_click=on_delete_profile_btn_click,
-          disabled=len(curr_user.profiles) == 0)
+    upd_prof_name = st.text_input('Введите название профиля')
+    if not upd_prof_name == "":
+        st.session_state["upd_prof_name"] = upd_prof_name
 
-with st.expander("Параметры чата"):
-    # Выбор элемента в ComboBox
-    default_prompt_str = st.text_area('Стандартный промпт ассистента')
+    prof_name_col1, prof_name_col2 = st.columns(2)
+    prof_name_col1.button(label='Добавить', use_container_width=True, icon='➕', on_click=on_add_profile_btn_click)
+    prof_name_col2.button(label='Изменить название текущего профиля', use_container_width=True, icon='✍🏻',
+                          on_click=on_change_profile_name_btn_click)
 
-st.subheader('Чат')
-# container for chat history
-response_container = st.container()
-# container for text box
-textcontainer = st.container()
+    st.button(label='Удалить', use_container_width=True, icon='❌',
+              on_click=on_delete_profile_btn_click,
+              disabled=len(curr_user.profiles) == 0)
 
-if "history" not in st.session_state:
-    st.session_state["history"] = []
+    with st.expander("Параметры чата"):
+        # Выбор элемента в ComboBox
+        default_prompt_str = st.text_area('Стандартный промпт ассистента')
+        with default_prompt_str:
+            if not default_prompt_str == "":
+                if 'Контекст: {context}' not in default_prompt_str:
+                    default_prompt_str += ' Контекст: {context}'
+                prompt_template = ChatPromptTemplate.from_messages(
+                    [default_prompt_str, MessagesPlaceholder(variable_name="history"), human_msg_template]
+                )
+                qa.combine_docs_chain.llm_chain.prompt = prompt_template
+
+    st.subheader('Чат')
+    # container for chat history
+    response_container = st.container()
+    # container for text box
+    textcontainer = st.container()
 
 with textcontainer:
     query = st.text_input("Запрос: ", key="input", placeholder='Введите запрос')
@@ -154,6 +170,15 @@ with textcontainer:
 
         st.session_state.requests.append(query)
         st.session_state.responses.append(answer)
+        for profile in curr_user.profiles:
+            if profile.name == profiles_sb:
+                profile = sqlite.Profile(id=profile.id, name=profile.name,
+                                         history=st.session_state["history"],
+                                         responses=st.session_state["responses"],
+                                         requests=st.session_state["requests"],
+                                         prompt=profile.prompt)
+                sqlite.update_user(curr_user)
+                break
 
 with response_container:
     if st.session_state['responses']:

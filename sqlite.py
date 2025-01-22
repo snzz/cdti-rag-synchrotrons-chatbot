@@ -12,7 +12,10 @@ db_name = 'cdti_rag_db.db'
 class Profile:
     id: uuid.UUID
     name: str
-    messages: [str]
+    history: [any]
+    responses: [any]
+    requests: [any]
+    prompt: str
 
 
 @dataclass
@@ -86,19 +89,17 @@ def get_users() -> [User]:
     return users
 
 
-def update_user_profiles(user_id: int, profiles: [Profile]):
-    user = get_user(user_id)
+def update_user(user: User):
     if user:
-        user.profiles = profiles
-        serialized_data = pickle.dumps(profiles)
+        serialized_data = pickle.dumps(user.profiles)
 
         conn = sqlite3.connect(db_name)
         cursor = conn.cursor()
         cursor.execute('''
-        UPDATE Users SET profiles = ? WHERE id = ?
-        ''', (serialized_data, user_id))
+        UPDATE Users SET email = ?, profiles = ? WHERE id = ?
+        ''', (user.email, serialized_data, user.id))
         conn.commit()
         conn.close()
     else:
-        raise ValueError(f"User with id {user_id} not found")
+        raise ValueError(f"User with id {user.id} not found")
 
