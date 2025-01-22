@@ -106,6 +106,7 @@ profiles_sb = st.selectbox(label='Выберите профиль:', options=use
 
 for profile in curr_user.profiles:
     if profile.name == profiles_sb:
+        profile = system_msg_template.template
         st.session_state["history"] = profile.history
         st.session_state['responses'] = profile.responses
         st.session_state['requests'] = profile.requests
