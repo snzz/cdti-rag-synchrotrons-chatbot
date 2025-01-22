@@ -98,7 +98,7 @@ if not curr_user:
 
 if len(curr_user.profiles) == 0:
     curr_user.profiles.append(sqlite.Profile(id=uuid.uuid4(), name='Новый профиль', history=[], responses=[],
-                                             requests=[], prompt=system_msg_template))
+                                             requests=[], prompt=system_msg_template.template))
     sqlite.update_user(user=curr_user)
 
 user_profiles_cb_values = map(lambda p: p.name, curr_user.profiles)
