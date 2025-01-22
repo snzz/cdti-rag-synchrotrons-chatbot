@@ -111,6 +111,9 @@ for profile in curr_user.profiles:
         st.session_state['requests'] = profile.requests
         st.session_state['prompt'] = profile.prompt
 
+if st.session_state['prompt'] == '':
+    st.session_state['prompt'] = system_msg_template
+
 upd_prof_name = st.text_input('Введите название профиля')
 if not upd_prof_name == "":
     st.session_state["upd_prof_name"] = upd_prof_name
@@ -126,7 +129,7 @@ st.button(label='Удалить', use_container_width=True, icon='❌',
 
 with st.expander("Параметры чата"):
     # Выбор элемента в ComboBox
-    default_prompt_str = st.text_area('Стандартный промпт ассистента')
+    default_prompt_str = st.text_area('Стандартный промпт ассистента', value=st.session_state['prompt'])
     if not default_prompt_str == "":
         if 'Контекст: {context}' not in default_prompt_str:
             default_prompt_str += ' Контекст: {context}'
