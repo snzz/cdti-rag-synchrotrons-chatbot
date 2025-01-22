@@ -104,44 +104,43 @@ if len(curr_user.profiles) == 0:
 user_profiles_cb_values = map(lambda p: p.name, curr_user.profiles)
 profiles_sb = st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values, on_change=on_change_profiles_sb)
 
-with profiles_sb:
-    for profile in curr_user.profiles:
-        if profile.name == profiles_sb:
-            st.session_state["history"] = profile['history']
-            st.session_state['responses'] = profile['responses']
-            st.session_state['requests'] = profile['requests']
-            st.session_state['prompt'] = profile['prompt']
+for profile in curr_user.profiles:
+    if profile.name == profiles_sb:
+        st.session_state["history"] = profile['history']
+        st.session_state['responses'] = profile['responses']
+        st.session_state['requests'] = profile['requests']
+        st.session_state['prompt'] = profile['prompt']
 
-    upd_prof_name = st.text_input('Введите название профиля')
-    if not upd_prof_name == "":
-        st.session_state["upd_prof_name"] = upd_prof_name
+upd_prof_name = st.text_input('Введите название профиля')
+if not upd_prof_name == "":
+    st.session_state["upd_prof_name"] = upd_prof_name
 
-    prof_name_col1, prof_name_col2 = st.columns(2)
-    prof_name_col1.button(label='Добавить', use_container_width=True, icon='➕', on_click=on_add_profile_btn_click)
-    prof_name_col2.button(label='Изменить название текущего профиля', use_container_width=True, icon='✍🏻',
-                          on_click=on_change_profile_name_btn_click)
+prof_name_col1, prof_name_col2 = st.columns(2)
+prof_name_col1.button(label='Добавить', use_container_width=True, icon='➕', on_click=on_add_profile_btn_click)
+prof_name_col2.button(label='Изменить название текущего профиля', use_container_width=True, icon='✍🏻',
+                      on_click=on_change_profile_name_btn_click)
 
-    st.button(label='Удалить', use_container_width=True, icon='❌',
-              on_click=on_delete_profile_btn_click,
-              disabled=len(curr_user.profiles) == 0)
+st.button(label='Удалить', use_container_width=True, icon='❌',
+          on_click=on_delete_profile_btn_click,
+          disabled=len(curr_user.profiles) == 0)
 
-    with st.expander("Параметры чата"):
-        # Выбор элемента в ComboBox
-        default_prompt_str = st.text_area('Стандартный промпт ассистента')
-        with default_prompt_str:
-            if not default_prompt_str == "":
-                if 'Контекст: {context}' not in default_prompt_str:
-                    default_prompt_str += ' Контекст: {context}'
-                prompt_template = ChatPromptTemplate.from_messages(
-                    [default_prompt_str, MessagesPlaceholder(variable_name="history"), human_msg_template]
-                )
-                qa.combine_docs_chain.llm_chain.prompt = prompt_template
+with st.expander("Параметры чата"):
+    # Выбор элемента в ComboBox
+    default_prompt_str = st.text_area('Стандартный промпт ассистента')
+    with default_prompt_str:
+        if not default_prompt_str == "":
+            if 'Контекст: {context}' not in default_prompt_str:
+                default_prompt_str += ' Контекст: {context}'
+            prompt_template = ChatPromptTemplate.from_messages(
+                [default_prompt_str, MessagesPlaceholder(variable_name="history"), human_msg_template]
+            )
+            qa.combine_docs_chain.llm_chain.prompt = prompt_template
 
-    st.subheader('Чат')
-    # container for chat history
-    response_container = st.container()
-    # container for text box
-    textcontainer = st.container()
+st.subheader('Чат')
+# container for chat history
+response_container = st.container()
+# container for text box
+textcontainer = st.container()
 
 with textcontainer:
     query = st.text_input("Запрос: ", key="input", placeholder='Введите запрос')
