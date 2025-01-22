@@ -106,10 +106,10 @@ profiles_sb = st.selectbox(label='Выберите профиль:', options=use
 
 for profile in curr_user.profiles:
     if profile.name == profiles_sb:
-        st.session_state["history"] = profile['history']
-        st.session_state['responses'] = profile['responses']
-        st.session_state['requests'] = profile['requests']
-        st.session_state['prompt'] = profile['prompt']
+        st.session_state["history"] = profile.history
+        st.session_state['responses'] = profile.responses
+        st.session_state['requests'] = profile.requests
+        st.session_state['prompt'] = profile.prompt
 
 upd_prof_name = st.text_input('Введите название профиля')
 if not upd_prof_name == "":
