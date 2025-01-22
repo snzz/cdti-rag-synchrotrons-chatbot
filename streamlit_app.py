@@ -127,14 +127,13 @@ st.button(label='Удалить', use_container_width=True, icon='❌',
 with st.expander("Параметры чата"):
     # Выбор элемента в ComboBox
     default_prompt_str = st.text_area('Стандартный промпт ассистента')
-    with default_prompt_str:
-        if not default_prompt_str == "":
-            if 'Контекст: {context}' not in default_prompt_str:
-                default_prompt_str += ' Контекст: {context}'
-            prompt_template = ChatPromptTemplate.from_messages(
-                [default_prompt_str, MessagesPlaceholder(variable_name="history"), human_msg_template]
-            )
-            qa.combine_docs_chain.llm_chain.prompt = prompt_template
+    if not default_prompt_str == "":
+        if 'Контекст: {context}' not in default_prompt_str:
+            default_prompt_str += ' Контекст: {context}'
+        prompt_template = ChatPromptTemplate.from_messages(
+            [default_prompt_str, MessagesPlaceholder(variable_name="history"), human_msg_template]
+        )
+        qa.combine_docs_chain.llm_chain.prompt = prompt_template
 
 st.subheader('Чат')
 # container for chat history
