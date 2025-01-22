@@ -1,7 +1,7 @@
 import sqlite3
 import pickle
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 
@@ -12,10 +12,10 @@ db_name = 'cdti_rag_db.db'
 class Profile:
     id: uuid.UUID
     name: str
-    history: [any]
-    responses: [any]
-    requests: [any]
-    prompt: str
+    history: list = field(default_factory=list)
+    responses: list = field(default_factory=list)
+    requests: list = field(default_factory=list)
+    prompt: str = ""
 
 
 @dataclass
