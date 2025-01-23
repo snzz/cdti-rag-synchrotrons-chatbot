@@ -55,10 +55,8 @@ if 'buffer_memory' not in st.session_state:
     st.session_state.buffer_memory = ConversationBufferWindowMemory(k=3, return_messages=True)
 
 # Дефолтный промпт для ассистента
-system_msg = """
-Ты ассистент физических наук, отвечай настолько, насколько возможно правдиво, исходя из текущего контекста.
-Контекст: {context}
-"""
+system_msg = """Ты ассистент физических наук, отвечай настолько, насколько возможно правдиво, исходя из текущего контекста.
+Контекст: {context}"""
 system_msg_template = SystemMessagePromptTemplate.from_template(template=system_msg)
 
 human_msg_template = HumanMessagePromptTemplate.from_template(template="{question}")
