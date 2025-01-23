@@ -44,6 +44,19 @@ def init_users_table():
     conn.close()
 
 
+def clear_table(db: str, table_name: str):
+    try:
+        conn = sqlite3.connect(db)
+        cursor = conn.cursor()
+        cursor.execute(f"DELETE FROM {table_name};")
+        conn.commit()
+    except sqlite3.Error as e:
+        print(f"Ошибка при очистке таблицы: {e}")
+    finally:
+        if conn:
+            conn.close()
+
+
 def add_user(email: str, profiles: [Profile]) -> User:
     serialized_data = pickle.dumps(profiles)
     conn = sqlite3.connect(db_name)

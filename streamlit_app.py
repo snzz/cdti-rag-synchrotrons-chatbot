@@ -55,10 +55,11 @@ if 'buffer_memory' not in st.session_state:
     st.session_state.buffer_memory = ConversationBufferWindowMemory(k=3, return_messages=True)
 
 # Дефолтный промпт для ассистента
-system_msg_template = SystemMessagePromptTemplate.from_template(template="""
+system_msg = """
 Ты ассистент физических наук, отвечай настолько, насколько возможно правдиво, исходя из текущего контекста.
 Контекст: {context}
-""")
+"""
+system_msg_template = SystemMessagePromptTemplate.from_template(template=system_msg)
 
 human_msg_template = HumanMessagePromptTemplate.from_template(template="{question}")
 
@@ -82,6 +83,7 @@ qa.combine_docs_chain.llm_chain.prompt = prompt_template
 
 # db
 conn = sqlite.connect_to_db()
+sqlite.clear_table(sqlite.db_name, 'Users')
 sqlite.init_users_table()
 #
 
@@ -97,8 +99,9 @@ if not curr_user:
     curr_user = sqlite.add_user(email=curr_user_email, profiles=[])
 
 if len(curr_user.profiles) == 0:
-    curr_user.profiles.append(sqlite.Profile(id=uuid.uuid4(), name='Новый профиль', history=[], responses=[],
-                                             requests=[], prompt=system_msg_template.template))
+    curr_user.profiles.append(sqlite.Profile(id=uuid.uuid4(), name='Новый профиль', history=[],
+                                             responses=["Чем я могу Вам помочь?"], requests=[],
+                                             prompt=system_msg))
     sqlite.update_user(user=curr_user)
 
 user_profiles_cb_values = map(lambda p: p.name, curr_user.profiles)
@@ -106,7 +109,6 @@ profiles_sb = st.selectbox(label='Выберите профиль:', options=use
 
 for profile in curr_user.profiles:
     if profile.name == profiles_sb:
-        profile = system_msg_template.template
         st.session_state["history"] = profile.history
         st.session_state['responses'] = profile.responses
         st.session_state['requests'] = profile.requests
