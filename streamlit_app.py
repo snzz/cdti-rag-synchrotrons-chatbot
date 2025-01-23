@@ -81,7 +81,6 @@ qa.combine_docs_chain.llm_chain.prompt = prompt_template
 
 # db
 conn = sqlite.connect_to_db()
-sqlite.clear_table(sqlite.db_name, 'Users')
 sqlite.init_users_table()
 #
 
