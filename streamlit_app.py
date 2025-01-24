@@ -119,17 +119,16 @@ if not upd_prof_name == "":
     st.session_state["upd_prof_name"] = upd_prof_name
 
 prof_name_col1, prof_name_col2 = st.columns(2)
-prof_name_col1.button(label='Добавить', use_container_width=True, icon='➕', on_click=on_add_profile_btn_click)
+prof_name_col1.button(label='Добавить', use_container_width=True, icon='📃', on_click=on_add_profile_btn_click)
 prof_name_col2.button(label='Изменить название текущего профиля', use_container_width=True, icon='✍🏻',
                       on_click=on_change_profile_name_btn_click)
 
-st.divider()
-st.button(label='Удалить', use_container_width=True, icon='❌',
+st.button(label='Удалить', use_container_width=True, icon='🗑',
           on_click=on_delete_profile_btn_click,
           disabled=len(curr_user.profiles) == 0)
 st.button(label='Очистить историю сообщений', use_container_width=True, icon='🧹')
 
-with st.expander("Параметры чата", icon='⚙'):
+with st.expander("Параметры чата"):
     # Выбор элемента в ComboBox
     default_prompt_str = st.text_area('Стандартный промпт ассистента', value=st.session_state['prompt'])
     if not default_prompt_str == "":
