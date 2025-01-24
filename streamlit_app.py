@@ -39,8 +39,8 @@ def on_clear_message_history_btn_click():
     selected_profile_name = st.session_state['selected_profile_name']
     for profile_ in curr_user_.profiles:
         if profile_.name == selected_profile_name:
-            profile_.history = ["Чем я могу Вам помочь?"]
-            profile_.responses = []
+            profile_.history = []
+            profile_.responses = ["Чем я могу Вам помочь?"]
             profile_.requests = []
             st.session_state["history"] = profile_.history
             st.session_state['responses'] = profile_.responses
@@ -131,21 +131,20 @@ for profile in curr_user.profiles:
 if st.session_state['prompt'] == '':
     st.session_state['prompt'] = system_msg_template
 
-with st.expander('Редактирование профилей'):
-    upd_prof_name = st.text_input('Введите название профиля')
-    if not upd_prof_name == "":
-        st.session_state["upd_prof_name"] = upd_prof_name
+upd_prof_name = st.text_input('Введите название профиля')
+if not upd_prof_name == "":
+    st.session_state["upd_prof_name"] = upd_prof_name
 
-    prof_name_col1, prof_name_col2 = st.columns(2)
-    prof_name_col1.button(label='Добавить новый профиль', use_container_width=True,
-                          icon='📃', on_click=on_add_profile_btn_click)
-    prof_name_col2.button(label='Изменить название текущего профиля', use_container_width=True,
-                          icon='✍🏻', on_click=on_change_profile_name_btn_click)
+prof_name_col1, prof_name_col2 = st.columns(2)
+prof_name_col1.button(label='Добавить новый профиль', use_container_width=True,
+                      icon='📃', on_click=on_add_profile_btn_click)
+prof_name_col2.button(label='Изменить название текущего профиля', use_container_width=True,
+                      icon='✍🏻', on_click=on_change_profile_name_btn_click)
 
-    st.button(label='Удалить выбранный профиль', use_container_width=True, icon='❌',
-              on_click=on_delete_profile_btn_click, disabled=len(curr_user.profiles) == 0)
-    st.button(label='Очистить историю сообщений', use_container_width=True, icon='🧹',
-              on_click=on_clear_message_history_btn_click, disabled=len(curr_user.profiles) == 0)
+st.button(label='Удалить выбранный профиль', use_container_width=True, icon='❌',
+          on_click=on_delete_profile_btn_click, disabled=len(curr_user.profiles) == 0)
+st.button(label='Очистить историю сообщений', use_container_width=True, icon='🧹',
+          on_click=on_clear_message_history_btn_click, disabled=len(curr_user.profiles) == 0)
 
 with st.expander('Параметры чата'):
     # Выбор элемента в ComboBox
