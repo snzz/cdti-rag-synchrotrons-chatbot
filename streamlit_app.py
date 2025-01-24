@@ -45,6 +45,8 @@ def on_clear_message_history_btn_click():
             st.session_state["history"] = profile_.history
             st.session_state['responses'] = profile_.responses
             st.session_state['requests'] = profile_.requests
+            sqlite.update_user(user=curr_user_)
+            break
 
 
 def on_change_profiles_sb():
