@@ -23,22 +23,68 @@ from utils import *
 
 
 def on_add_profile_btn_click():
-    pass
+    new_profile_name = st.session_state["upd_prof_name"]
+    if new_profile_name == '':
+        st.error('Название профиля не может быть пустым')
+        return
+
+    curr_user_ = st.session_state['curr_user']
+    if len(curr_user_.profiles) > 10:
+        st.error('Превышен лимит количества профилей на пользователя: 10')
+        return
+
+    for profile_ in curr_user_.profiles:
+        if profile_.name == new_profile_name:
+            st.error('Профиль с таким названием уже существует')
+            return
+
+    global system_msg
+    curr_user_.profiles.append(sqlite.Profile(id=uuid.uuid4(), name='Новый профиль', history=[],
+                                              responses=["Чем я могу Вам помочь?"], requests=[],
+                                              prompt=system_msg))
+    sqlite.update_user(user=curr_user_)
+    st.session_state['curr_user'] = curr_user_
+    st.session_state['selected_profile_index'] += 1
 
 
 def on_delete_profile_btn_click():
-    pass
+    curr_user_ = st.session_state['curr_user']
+    selected_profile_name_ = st.session_state.selected_profile_name
+
+    if len(curr_user_.profiles) <= 1:
+        st.error('Минимальное количество профилей: 1')
+        return
+
+    for i, profile_ in enumerate(curr_user_.profiles):
+        if profile_.name == selected_profile_name_:
+            del curr_user_.profiles[i]
+            sqlite.update_user(curr_user_)
+            st.session_state['curr_user'] = curr_user_
+            break
 
 
 def on_change_profile_name_btn_click():
-    pass
+    curr_user_ = st.session_state['curr_user']
+    selected_profile_name_ = st.session_state.selected_profile_name
+
+    new_profile_name = st.session_state["upd_prof_name"]
+    if new_profile_name == '':
+        st.error('Название профиля не может быть пустым')
+        return
+
+    for profile_ in curr_user_.profiles:
+        if profile_.name == selected_profile_name_:
+            profile_.name = new_profile_name
+            sqlite.update_user(curr_user_)
+            st.session_state['curr_user'] = curr_user_
+            break
 
 
 def on_clear_message_history_btn_click():
     curr_user_ = st.session_state['curr_user']
-    selected_profile_name = st.session_state['selected_profile_name']
+    selected_profile_name_ = st.session_state.selected_profile_name
     for profile_ in curr_user_.profiles:
-        if profile_.name == selected_profile_name:
+        if profile_.name == selected_profile_name_:
             profile_.history = []
             profile_.responses = ["Чем я могу Вам помочь?"]
             profile_.requests = []
@@ -46,11 +92,21 @@ def on_clear_message_history_btn_click():
             st.session_state['responses'] = profile_.responses
             st.session_state['requests'] = profile_.requests
             sqlite.update_user(user=curr_user_)
+            st.session_state['curr_user'] = curr_user_
             break
 
 
 def on_change_profiles_sb():
-    pass
+    curr_user_ = st.session_state['curr_user']
+    selected_profile_name_ = st.session_state.selected_profile_name
+    for i, profile_ in enumerate(curr_user_.profiles):
+        if profile_.name == selected_profile_name_:
+            st.session_state['prompt'] = profile_.prompt
+            st.session_state['history'] = profile_.history
+            st.session_state['responses'] = profile_.responses
+            st.session_state['requests'] = profile_.requests
+            st.session_state['selected_profile_index'] = i
+            break
 
 
 st.subheader("Ассистент по теме 'Синхротроны'")
@@ -95,12 +151,15 @@ qa.combine_docs_chain.llm_chain.prompt = prompt_template
 ### НАСТРОЙКА LLM
 
 # db
-conn = sqlite.connect_to_db()
 sqlite.init_users_table()
 #
 
 curr_user_email = st.experimental_user.email
 users_collection = sqlite.get_users()
+if not users_collection:
+    users_collection = []
+st.session_state['users'] = users_collection
+
 curr_user: sqlite.User | None = None
 for user in users_collection:
     if user.email == curr_user_email:
@@ -118,11 +177,14 @@ if len(curr_user.profiles) == 0:
 
 st.session_state['curr_user'] = curr_user
 user_profiles_cb_values = map(lambda p: p.name, curr_user.profiles)
-profiles_sb = st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values, on_change=on_change_profiles_sb)
-st.session_state['selected_profile_name'] = profiles_sb
+if not st.session_state['selected_profile_index']:
+    st.session_state['selected_profile_index'] = 0
+
+selected_profile_name = st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values,
+                                     on_change=on_change_profiles_sb, index=st.session_state['selected_profile_index'])
 
 for profile in curr_user.profiles:
-    if profile.name == profiles_sb:
+    if profile.name == selected_profile_name:
         st.session_state["history"] = profile.history
         st.session_state['responses'] = profile.responses
         st.session_state['requests'] = profile.requests
@@ -191,7 +253,7 @@ with textcontainer:
         st.session_state.requests.append(query)
         st.session_state.responses.append(answer)
         for profile in curr_user.profiles:
-            if profile.name == profiles_sb:
+            if profile.name == selected_profile_name:
                 profile = sqlite.Profile(id=profile.id, name=profile.name,
                                          history=st.session_state["history"],
                                          responses=st.session_state["responses"],

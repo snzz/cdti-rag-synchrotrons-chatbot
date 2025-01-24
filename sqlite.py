@@ -25,11 +25,6 @@ class User:
     profiles: [Profile]
 
 
-def connect_to_db() -> Any:
-    conn = sqlite3.connect('example.db')
-    return conn
-
-
 def init_users_table():
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
