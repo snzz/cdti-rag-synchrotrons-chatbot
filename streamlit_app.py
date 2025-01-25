@@ -204,7 +204,7 @@ for i, profile in enumerate(curr_user.profiles):
         st.session_state['responses'] = profile.responses
         st.session_state['requests'] = profile.requests
         st.session_state['prompt'] = profile.prompt
-        st.session_state['selected_profile_index'] = i
+        # st.session_state['selected_profile_index'] = i
         break
 
 if st.session_state['prompt'] == '':
@@ -217,8 +217,7 @@ prof_name_col1, prof_name_col2 = st.columns(2)
 prof_name_col1.button(label='Добавить новый профиль', use_container_width=True,
                       icon='📃', on_click=on_add_profile_btn_click)
 prof_name_col2.button(label='Изменить название текущего профиля', use_container_width=True,
-                      icon='✍🏻',
-                      on_click=on_change_profile_name_btn_click)
+                      icon='✍🏻', on_click=on_change_profile_name_btn_click)
 
 with st.expander('Удаление данных профиля', icon='❗'):
     st.button(label='Удалить выбранный профиль', use_container_width=True, icon='❌',
