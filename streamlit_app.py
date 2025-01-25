@@ -231,7 +231,7 @@ with st.expander('Параметры чата', icon='🔧'):
     st.session_state.update()
     default_prompt_str = st.text_area('Стандартный промпт ассистента:', value=st.session_state['prompt'])
     
-    if st.columns(1).button('Сохранить', use_container_width=True):
+    if st.button('Сохранить', use_container_width=True):
         if 'Контекст: {context}' not in default_prompt_str:
             default_prompt_str += ' Контекст: {context}'
 
