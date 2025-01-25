@@ -55,13 +55,13 @@ def on_delete_profile_btn_click():
         st.error('Минимальное количество профилей: 1')
         return
 
-    for i, profile_ in enumerate(curr_user_.profiles):
+    for i_, profile_ in enumerate(curr_user_.profiles):
         if profile_.name == selected_profile_name_:
-            del curr_user_.profiles[i]
+            del curr_user_.profiles[i_]
             sqlite.update_user(curr_user_)
             st.session_state['curr_user'] = curr_user_
             break
-    st.session_state['selected_profile_index'] -= 1
+    st.session_state['selected_profile_index'] = 0
 
 
 def on_change_profile_name_btn_click():
