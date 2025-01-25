@@ -192,7 +192,7 @@ user_profiles_cb_values = map(lambda p: p.name, curr_user.profiles)
 if 'selected_profile_index' not in st.session_state:
     st.session_state['selected_profile_index'] = 0
 
-st.session_state["selected_profile_name"] = st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values)
+st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values, key='selected_profile_name')
 
 for i, profile in enumerate(curr_user.profiles):
     if profile.name == st.session_state["selected_profile_name"]:
@@ -207,22 +207,22 @@ for i, profile in enumerate(curr_user.profiles):
 if st.session_state['prompt'] == '':
     st.session_state['prompt'] = system_msg_template
 
-updated_profile_name = st.text_input('Введите название профиля', key="upd_prof_name")
+st.text_input('Введите название профиля', key="upd_prof_name")
 st.session_state.update()
 
 prof_name_col1, prof_name_col2 = st.columns(2)
 prof_name_col1.button(label='Добавить новый профиль', use_container_width=True,
-                      icon='📃', on_click=on_add_profile_btn_click, args=(updated_profile_name,))
+                      icon='📃', on_click=on_add_profile_btn_click, args=(st.session_state['upd_prof_name'],))
 prof_name_col2.button(label='Изменить название текущего профиля', use_container_width=True,
-                      icon='✍🏻', args=(updated_profile_name,),
+                      icon='✍🏻', args=(st.session_state['upd_prof_name'],),
                       on_click=on_change_profile_name_btn_click)
 
 st.button(label='Удалить выбранный профиль', use_container_width=True, icon='❌',
           on_click=on_delete_profile_btn_click, disabled=len(curr_user.profiles) == 0,
-          args=(updated_profile_name,))
+          args=(st.session_state['upd_prof_name'],))
 st.button(label='Очистить историю сообщений', use_container_width=True, icon='🧹',
           on_click=on_clear_message_history_btn_click, disabled=len(curr_user.profiles) == 0,
-          args=(updated_profile_name,))
+          args=(st.session_state['upd_prof_name'],))
 
 with st.expander('Параметры чата'):
     # Выбор элемента в ComboBox
