@@ -22,9 +22,8 @@ import utils
 from utils import *
 
 
-def on_add_profile_btn_click():
-    new_profile_name = st.session_state["upd_prof_name"]
-    if new_profile_name == '':
+def on_add_profile_btn_click(profile_name):
+    if profile_name == '':
         st.error('Название профиля не может быть пустым')
         return
 
@@ -34,12 +33,12 @@ def on_add_profile_btn_click():
         return
 
     for profile_ in curr_user_.profiles:
-        if profile_.name == new_profile_name:
+        if profile_.name == profile_name:
             st.error('Профиль с таким названием уже существует')
             return
 
     global system_msg
-    curr_user_.profiles.append(sqlite.Profile(id=uuid.uuid4(), name=new_profile_name, history=[],
+    curr_user_.profiles.append(sqlite.Profile(id=uuid.uuid4(), name=profile_name, history=[],
                                               responses=["Чем я могу Вам помочь?"], requests=[],
                                               prompt=system_msg))
     sqlite.update_user(user=curr_user_)
@@ -67,13 +66,13 @@ def on_delete_profile_btn_click():
     st.session_state.update()
 
 
-def on_change_profile_name_btn_click():
+def on_change_profile_name_btn_click(profile_name):
     st.session_state.update()
     curr_user_ = st.session_state['curr_user']
     selected_profile_name_ = st.session_state["selected_profile_name"]
     st.write(selected_profile_name_)
 
-    new_profile_name = st.session_state["upd_prof_name"]
+    new_profile_name = profile_name
     if new_profile_name == '':
         st.error('Название профиля не может быть пустым')
         return
@@ -204,19 +203,23 @@ for i, profile in enumerate(curr_user.profiles):
 if st.session_state['prompt'] == '':
     st.session_state['prompt'] = system_msg_template
 
-st.session_state["upd_prof_name"] = st.text_input('Введите название профиля')
+updated_profile_name = st.text_input('Введите название профиля')
+st.session_state["upd_prof_name"] = updated_profile_name
 st.session_state.update()
 
 prof_name_col1, prof_name_col2 = st.columns(2)
 prof_name_col1.button(label='Добавить новый профиль', use_container_width=True,
-                      icon='📃', on_click=on_add_profile_btn_click)
+                      icon='📃', on_click=on_add_profile_btn_click, args=(updated_profile_name,))
 prof_name_col2.button(label='Изменить название текущего профиля', use_container_width=True,
-                      icon='✍🏻', on_click=on_change_profile_name_btn_click)
+                      icon='✍🏻', args=(updated_profile_name,),
+                      on_click=on_change_profile_name_btn_click)
 
 st.button(label='Удалить выбранный профиль', use_container_width=True, icon='❌',
-          on_click=on_delete_profile_btn_click, disabled=len(curr_user.profiles) == 0)
+          on_click=on_delete_profile_btn_click, disabled=len(curr_user.profiles) == 0,
+          args=(updated_profile_name,))
 st.button(label='Очистить историю сообщений', use_container_width=True, icon='🧹',
-          on_click=on_clear_message_history_btn_click, disabled=len(curr_user.profiles) == 0)
+          on_click=on_clear_message_history_btn_click, disabled=len(curr_user.profiles) == 0,
+          args=(updated_profile_name,))
 
 with st.expander('Параметры чата'):
     # Выбор элемента в ComboBox
