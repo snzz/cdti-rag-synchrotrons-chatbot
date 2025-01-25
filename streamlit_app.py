@@ -101,12 +101,12 @@ def on_change_profiles_sb():
     selected_profile_name_ = st.session_state["selected_profile_name"]
     for i, profile_ in enumerate(curr_user_.profiles):
         if profile_.name == selected_profile_name_:
-            # st.session_state['prompt'] = profile_.prompt
-            # st.session_state['history'] = profile_.history
-            # st.session_state['responses'] = profile_.responses
-            # st.session_state['requests'] = profile_.requests
-            # st.session_state['selected_profile_index'] = i
-            # st.write(f'test: {selected_profile_name_} - {st.session_state['selected_profile_index']}')
+            st.session_state['prompt'] = profile_.prompt
+            st.session_state['history'] = profile_.history
+            st.session_state['responses'] = profile_.responses
+            st.session_state['requests'] = profile_.requests
+            st.session_state['selected_profile_index'] = i
+            st.write(f'test: {selected_profile_name_} - {st.session_state['selected_profile_index']}')
             break
 
 
@@ -255,7 +255,7 @@ with textcontainer:
         st.session_state.requests.append(query)
         st.session_state.responses.append(answer)
         for profile in curr_user.profiles:
-            if profile.name == selected_profile_name:
+            if profile.name == st.session_state["selected_profile_name"]:
                 profile = sqlite.Profile(id=profile.id, name=profile.name,
                                          history=st.session_state["history"],
                                          responses=st.session_state["responses"],
