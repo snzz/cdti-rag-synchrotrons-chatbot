@@ -191,6 +191,8 @@ for i, profile in enumerate(curr_user.profiles):
         st.session_state['requests'] = profile.requests
         st.session_state['prompt'] = profile.prompt
         st.session_state['selected_profile_index'] = i
+        st.write(st.session_state['selected_profile_index'])
+        break
 
 if st.session_state['prompt'] == '':
     st.session_state['prompt'] = system_msg_template
