@@ -216,10 +216,10 @@ prof_name_col1, prof_name_col2 = st.columns(2)
 prof_name_col1.button(label='Добавить новый профиль', use_container_width=True,
                       icon='📃', on_click=on_add_profile_btn_click)
 prof_name_col2.button(label='Изменить название текущего профиля', use_container_width=True,
-                      icon='✍',
+                      icon='✍🏻',
                       on_click=on_change_profile_name_btn_click)
 
-with st.expander('Удаление информации профиля', icon='⚠'):
+with st.expander('Удаление информации профиля', icon='❗'):
     st.button(label='Удалить выбранный профиль', use_container_width=True, icon='❌',
               on_click=on_delete_profile_btn_click, disabled=len(curr_user.profiles) == 0)
     st.button(label='Очистить историю сообщений', use_container_width=True, icon='🧹',
