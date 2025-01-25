@@ -51,6 +51,7 @@ def on_add_profile_btn_click():
 def on_delete_profile_btn_click():
     curr_user_ = st.session_state['curr_user']
     selected_profile_name_ = st.session_state["selected_profile_name"]
+    st.write(selected_profile_name_)
 
     if len(curr_user_.profiles) <= 1:
         st.error('Минимальное количество профилей: 1')
@@ -70,6 +71,7 @@ def on_change_profile_name_btn_click():
     st.session_state.update()
     curr_user_ = st.session_state['curr_user']
     selected_profile_name_ = st.session_state["selected_profile_name"]
+    st.write(selected_profile_name_)
 
     new_profile_name = st.session_state["upd_prof_name"]
     if new_profile_name == '':
