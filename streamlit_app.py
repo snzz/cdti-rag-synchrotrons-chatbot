@@ -105,8 +105,8 @@ def on_change_profiles_sb():
             st.session_state['history'] = profile_.history
             st.session_state['responses'] = profile_.responses
             st.session_state['requests'] = profile_.requests
-            st.session_state['selected_profile_index'] = i
-            st.write(f'test: {selected_profile_name_} - {st.session_state['selected_profile_index']}')
+            # st.session_state['selected_profile_index'] = i
+            # st.write(f'test: {selected_profile_name_} - {st.session_state['selected_profile_index']}')
             break
 
 
