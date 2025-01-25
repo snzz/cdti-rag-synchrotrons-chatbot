@@ -58,16 +58,23 @@ def on_delete_profile_btn_click():
         st.error('Минимальное количество профилей: 1')
         return
 
-    for i_, profile_ in enumerate(curr_user_.profiles):
-        if profile_.name == selected_profile_name_:
-            del curr_user_.profiles[i_]
-            sqlite.update_user(curr_user_)
-            st.session_state['curr_user'] = curr_user_
-            break
+    with st.form("ProfileDeletingForm"):
+        st.write(f"Вы уверены, что хотите удалить профиль '{selected_profile_name_}'?")
+        form_button_col1, form_button_col2 = st.columns(2)
+        submitted = form_button_col1.form_submit_button("Удалить", use_container_width=True)
+        cancelled = form_button_col2.form_submit_button("Отмена", use_container_width=True)
 
-    st.session_state['selected_profile_index'] = len(curr_user_.profiles) - 1
-    st.session_state.update()
-    st.success(f"Профиль '{st.session_state["selected_profile_name"]}' был успешно удален")
+    if submitted:
+        for i_, profile_ in enumerate(curr_user_.profiles):
+            if profile_.name == selected_profile_name_:
+                del curr_user_.profiles[i_]
+                sqlite.update_user(curr_user_)
+                st.session_state['curr_user'] = curr_user_
+                break
+
+        st.session_state['selected_profile_index'] = len(curr_user_.profiles) - 1
+        st.session_state.update()
+        st.success(f"Профиль '{st.session_state["selected_profile_name"]}' был успешно удален")
 
 
 def on_change_profile_name_btn_click():
@@ -94,18 +101,26 @@ def on_clear_message_history_btn_click():
     st.session_state.update()
     curr_user_ = st.session_state['curr_user']
     selected_profile_name_ = st.session_state["selected_profile_name"]
-    for profile_ in curr_user_.profiles:
-        if profile_.name == selected_profile_name_:
-            profile_.history = []
-            profile_.responses = ["Чем я могу Вам помочь?"]
-            profile_.requests = []
-            st.session_state["history"] = profile_.history
-            st.session_state['responses'] = profile_.responses
-            st.session_state['requests'] = profile_.requests
-            sqlite.update_user(user=curr_user_)
-            st.session_state['curr_user'] = curr_user_
-            st.session_state.update()
-            break
+
+    with st.form("ProfileMessageHistoryClearingForm"):
+        st.write(f"Вы уверены, что хотите очистить историю сообщений профиля '{selected_profile_name_}'?")
+        form_button_col1, form_button_col2 = st.columns(2)
+        submitted = form_button_col1.form_submit_button("Удалить", use_container_width=True)
+        cancelled = form_button_col2.form_submit_button("Отмена", use_container_width=True)
+
+    if submitted:
+        for profile_ in curr_user_.profiles:
+            if profile_.name == selected_profile_name_:
+                profile_.history = []
+                profile_.responses = ["Чем я могу Вам помочь?"]
+                profile_.requests = []
+                st.session_state["history"] = profile_.history
+                st.session_state['responses'] = profile_.responses
+                st.session_state['requests'] = profile_.requests
+                sqlite.update_user(user=curr_user_)
+                st.session_state['curr_user'] = curr_user_
+                st.session_state.update()
+                break
 
 
 st.subheader("Ассистент по теме 'Синхротроны'")
