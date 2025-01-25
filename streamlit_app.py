@@ -23,6 +23,7 @@ from utils import *
 
 
 def on_add_profile_btn_click(profile_name):
+    st.session_state.update()
     if profile_name == '':
         st.error('Название профиля не может быть пустым')
         return
@@ -48,6 +49,7 @@ def on_add_profile_btn_click(profile_name):
 
 
 def on_delete_profile_btn_click():
+    st.session_state.update()
     curr_user_ = st.session_state['curr_user']
     selected_profile_name_ = st.session_state["selected_profile_name"]
     st.write(selected_profile_name_)
@@ -87,6 +89,7 @@ def on_change_profile_name_btn_click(profile_name):
 
 
 def on_clear_message_history_btn_click():
+    st.session_state.update()
     curr_user_ = st.session_state['curr_user']
     selected_profile_name_ = st.session_state["selected_profile_name"]
     for profile_ in curr_user_.profiles:
