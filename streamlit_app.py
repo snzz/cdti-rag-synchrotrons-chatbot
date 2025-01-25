@@ -101,10 +101,10 @@ def on_change_profiles_sb():
     selected_profile_name_ = st.session_state["selected_profile_name"]
     for i, profile_ in enumerate(curr_user_.profiles):
         if profile_.name == selected_profile_name_:
-            st.session_state['prompt'] = profile_.prompt
-            st.session_state['history'] = profile_.history
-            st.session_state['responses'] = profile_.responses
-            st.session_state['requests'] = profile_.requests
+            # st.session_state['prompt'] = profile_.prompt
+            # st.session_state['history'] = profile_.history
+            # st.session_state['responses'] = profile_.responses
+            # st.session_state['requests'] = profile_.requests
             # st.session_state['selected_profile_index'] = i
             # st.write(f'test: {selected_profile_name_} - {st.session_state['selected_profile_index']}')
             break
@@ -185,7 +185,7 @@ if 'selected_profile_index' not in st.session_state:
 if 'selected_profile_name' not in st.session_state:
     st.session_state["selected_profile_name"] = st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values,
                                                              on_change=on_change_profiles_sb,
-                                                             index=st.session_state['selected_profile_index'])
+                                                             index=int(st.session_state['selected_profile_index']))
 
 for profile in curr_user.profiles:
     if profile.name == st.session_state["selected_profile_name"]:
