@@ -45,6 +45,7 @@ def on_add_profile_btn_click():
     sqlite.update_user(user=curr_user_)
     st.session_state['curr_user'] = curr_user_
     st.session_state['selected_profile_index'] += 1
+    st.session_state.update()
 
 
 def on_delete_profile_btn_click():
@@ -62,6 +63,7 @@ def on_delete_profile_btn_click():
             st.session_state['curr_user'] = curr_user_
             break
     st.session_state['selected_profile_index'] = 0
+    st.session_state.update()
 
 
 def on_change_profile_name_btn_click():
@@ -78,6 +80,7 @@ def on_change_profile_name_btn_click():
             profile_.name = new_profile_name
             sqlite.update_user(curr_user_)
             st.session_state['curr_user'] = curr_user_
+            st.session_state.update()
             break
 
 
@@ -94,6 +97,7 @@ def on_clear_message_history_btn_click():
             st.session_state['requests'] = profile_.requests
             sqlite.update_user(user=curr_user_)
             st.session_state['curr_user'] = curr_user_
+            st.session_state.update()
             break
 
 
@@ -220,6 +224,15 @@ with st.expander('Параметры чата'):
             [default_prompt_str, MessagesPlaceholder(variable_name="history"), human_msg_template]
         )
         qa.combine_docs_chain.llm_chain.prompt = prompt_template
+    for profile in curr_user.profiles:
+        if profile.name == st.session_state["selected_profile_name"]:
+            profile = sqlite.Profile(id=profile.id, name=profile.name,
+                                     history=st.session_state["history"],
+                                     responses=st.session_state["responses"],
+                                     requests=st.session_state["requests"],
+                                     prompt=profile.prompt)
+            sqlite.update_user(curr_user)
+            break
 
 st.subheader('Чат')
 # container for chat history
