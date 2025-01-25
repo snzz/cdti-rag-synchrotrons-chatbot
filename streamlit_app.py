@@ -96,18 +96,17 @@ def on_clear_message_history_btn_click():
             break
 
 
-def on_change_profiles_sb():
-    curr_user_ = st.session_state['curr_user']
-    selected_profile_name_ = st.session_state["selected_profile_name"]
-    for i, profile_ in enumerate(curr_user_.profiles):
-        if profile_.name == selected_profile_name_:
-            st.session_state['prompt'] = profile_.prompt
-            st.session_state['history'] = profile_.history
-            st.session_state['responses'] = profile_.responses
-            st.session_state['requests'] = profile_.requests
-            st.session_state['selected_profile_index'] = i
-            st.write(f'test: {selected_profile_name_} - {st.session_state['selected_profile_index']}')
-            break
+# def on_change_profiles_sb():
+#     curr_user_ = st.session_state['curr_user']
+#     selected_profile_name_ = st.session_state["selected_profile_name"]
+#     for i, profile_ in enumerate(curr_user_.profiles):
+#         if profile_.name == selected_profile_name_:
+#             st.session_state['prompt'] = profile_.prompt
+#             st.session_state['history'] = profile_.history
+#             st.session_state['responses'] = profile_.responses
+#             st.session_state['requests'] = profile_.requests
+#             st.session_state['selected_profile_index'] = i
+#             break
 
 
 st.subheader("Ассистент по теме 'Синхротроны'")
@@ -183,15 +182,15 @@ if 'selected_profile_index' not in st.session_state:
     st.session_state['selected_profile_index'] = 0
 
 st.session_state["selected_profile_name"] = st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values,
-                                                         on_change=on_change_profiles_sb,
                                                          index=int(st.session_state['selected_profile_index']))
 
-for profile in curr_user.profiles:
+for i, profile in enumerate(curr_user.profiles):
     if profile.name == st.session_state["selected_profile_name"]:
         st.session_state["history"] = profile.history
         st.session_state['responses'] = profile.responses
         st.session_state['requests'] = profile.requests
         st.session_state['prompt'] = profile.prompt
+        st.session_state['selected_profile_index'] = i
 
 if st.session_state['prompt'] == '':
     st.session_state['prompt'] = system_msg_template
