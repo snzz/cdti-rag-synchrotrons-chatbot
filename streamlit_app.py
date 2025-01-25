@@ -99,7 +99,6 @@ def on_clear_message_history_btn_click():
 def on_change_profiles_sb():
     curr_user_ = st.session_state['curr_user']
     selected_profile_name_ = st.session_state["selected_profile_name"]
-    st.write(f'test: {selected_profile_name_}')
     for i, profile_ in enumerate(curr_user_.profiles):
         if profile_.name == selected_profile_name_:
             st.session_state['prompt'] = profile_.prompt
@@ -107,6 +106,7 @@ def on_change_profiles_sb():
             st.session_state['responses'] = profile_.responses
             st.session_state['requests'] = profile_.requests
             st.session_state['selected_profile_index'] = i
+            st.write(f'test: {selected_profile_name_} - {st.session_state['selected_profile_index']}')
             break
 
 
