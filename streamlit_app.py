@@ -238,13 +238,14 @@ with st.expander('Параметры чата', icon='🔧'):
     )
     qa.combine_docs_chain.llm_chain.prompt = prompt_template
 
-    for profile in curr_user.profiles:
+    for i, profile in enumerate(curr_user.profiles):
         if profile.name == st.session_state["selected_profile_name"]:
-            profile = sqlite.Profile(id=profile.id, name=profile.name,
-                                     history=st.session_state["history"],
-                                     responses=st.session_state["responses"],
-                                     requests=st.session_state["requests"],
-                                     prompt=st.session_state['prompt'])
+            st.write(f'saved prompt: {st.session_state['prompt']}')
+            curr_user.profiles[i] = sqlite.Profile(id=profile.id, name=profile.name,
+                                                   history=st.session_state["history"],
+                                                   responses=st.session_state["responses"],
+                                                   requests=st.session_state["requests"],
+                                                   prompt=st.session_state['prompt'])
             sqlite.update_user(curr_user)
             break
 
