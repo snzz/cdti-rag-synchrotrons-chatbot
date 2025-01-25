@@ -151,7 +151,7 @@ qa.combine_docs_chain.llm_chain.prompt = prompt_template
 ### НАСТРОЙКА LLM
 
 # db
-sqlite.clear_table(sqlite.db_name, 'Users')
+# sqlite.clear_table(sqlite.db_name, 'Users')
 sqlite.init_users_table()
 #
 
