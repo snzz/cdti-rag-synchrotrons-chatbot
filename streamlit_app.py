@@ -199,7 +199,6 @@ st.selectbox(label='Выберите профиль:', options=user_profiles_cb_
 
 for i, profile in enumerate(curr_user.profiles):
     if profile.name == st.session_state["selected_profile_name"]:
-        st.write(profile)
         st.session_state["history"] = profile.history
         st.session_state['responses'] = profile.responses
         st.session_state['requests'] = profile.requests
