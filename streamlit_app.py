@@ -73,8 +73,7 @@ def on_change_profile_name_btn_click(profile_name):
     curr_user_ = st.session_state['curr_user']
     selected_profile_name_ = st.session_state["selected_profile_name"]
     st.write(selected_profile_name_)
-    st.write(f'profile_name: {profile_name}')
-    st.write(f'upd_prof_name: {st.session_state["upd_prof_name"]}')
+
     new_profile_name = st.session_state["upd_prof_name"]
     if new_profile_name == '':
         st.error('Название профиля не может быть пустым')
@@ -212,17 +211,15 @@ st.session_state.update()
 
 prof_name_col1, prof_name_col2 = st.columns(2)
 prof_name_col1.button(label='Добавить новый профиль', use_container_width=True,
-                      icon='📃', on_click=on_add_profile_btn_click, args=(st.session_state['upd_prof_name'],))
+                      icon='📃', on_click=on_add_profile_btn_click)
 prof_name_col2.button(label='Изменить название текущего профиля', use_container_width=True,
-                      icon='✍🏻', args=(st.session_state['upd_prof_name'],),
+                      icon='✍🏻',
                       on_click=on_change_profile_name_btn_click)
 
 st.button(label='Удалить выбранный профиль', use_container_width=True, icon='❌',
-          on_click=on_delete_profile_btn_click, disabled=len(curr_user.profiles) == 0,
-          args=(st.session_state['upd_prof_name'],))
+          on_click=on_delete_profile_btn_click, disabled=len(curr_user.profiles) == 0)
 st.button(label='Очистить историю сообщений', use_container_width=True, icon='🧹',
-          on_click=on_clear_message_history_btn_click, disabled=len(curr_user.profiles) == 0,
-          args=(st.session_state['upd_prof_name'],))
+          on_click=on_clear_message_history_btn_click, disabled=len(curr_user.profiles) == 0)
 
 with st.expander('Параметры чата'):
     # Выбор элемента в ComboBox
