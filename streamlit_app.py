@@ -209,7 +209,7 @@ for i, profile in enumerate(curr_user.profiles):
 if st.session_state['prompt'] == '':
     st.session_state['prompt'] = system_msg_template
 
-st.text_input('Введите название профиля', key="upd_prof_name")
+st.text_input('Введите название профиля:', key="upd_prof_name")
 st.session_state.update()
 
 prof_name_col1, prof_name_col2 = st.columns(2)
@@ -227,7 +227,8 @@ with st.expander('Удаление данных профиля', icon='❗'):
 
 with st.expander('Параметры чата', icon='🔧'):
     # Выбор элемента в ComboBox
-    default_prompt_str = st.text_area('Стандартный промпт ассистента', value=st.session_state['prompt'])
+    st.session_state.update()
+    default_prompt_str = st.text_area('Стандартный промпт ассистента:', value=st.session_state['prompt'])
     if not default_prompt_str == "":
         if 'Контекст: {context}' not in default_prompt_str:
             default_prompt_str += ' Контекст: {context}'
@@ -241,7 +242,7 @@ with st.expander('Параметры чата', icon='🔧'):
                                      history=st.session_state["history"],
                                      responses=st.session_state["responses"],
                                      requests=st.session_state["requests"],
-                                     prompt=profile.prompt)
+                                     prompt=default_prompt_str)
             sqlite.update_user(curr_user)
             break
 
