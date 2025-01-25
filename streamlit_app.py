@@ -73,8 +73,9 @@ def on_change_profile_name_btn_click(profile_name):
     curr_user_ = st.session_state['curr_user']
     selected_profile_name_ = st.session_state["selected_profile_name"]
     st.write(selected_profile_name_)
-
-    new_profile_name = profile_name
+    st.write(f'profile_name: {profile_name}')
+    st.write(f'upd_prof_name: {st.session_state["upd_prof_name"]}')
+    new_profile_name = st.session_state["upd_prof_name"]
     if new_profile_name == '':
         st.error('Название профиля не может быть пустым')
         return
@@ -206,7 +207,7 @@ for i, profile in enumerate(curr_user.profiles):
 if st.session_state['prompt'] == '':
     st.session_state['prompt'] = system_msg_template
 
-updated_profile_name = st.text_input('Введите название профиля')
+updated_profile_name = st.text_input('Введите название профиля', key="upd_prof_name")
 st.session_state["upd_prof_name"] = updated_profile_name
 st.session_state.update()
 
