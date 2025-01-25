@@ -219,13 +219,13 @@ prof_name_col2.button(label='Изменить название текущего 
                       icon='✍🏻',
                       on_click=on_change_profile_name_btn_click)
 
-with st.expander('Удаление информации профиля', icon='❗'):
+with st.expander('Удаление данных профиля', icon='❗'):
     st.button(label='Удалить выбранный профиль', use_container_width=True, icon='❌',
               on_click=on_delete_profile_btn_click, disabled=len(curr_user.profiles) == 0)
     st.button(label='Очистить историю сообщений', use_container_width=True, icon='🧹',
               on_click=on_clear_message_history_btn_click, disabled=len(curr_user.profiles) == 0)
 
-with st.expander('Параметры чата'):
+with st.expander('Параметры чата', icon='🔧'):
     # Выбор элемента в ComboBox
     default_prompt_str = st.text_area('Стандартный промпт ассистента', value=st.session_state['prompt'])
     if not default_prompt_str == "":
