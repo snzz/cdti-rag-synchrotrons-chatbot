@@ -64,7 +64,8 @@ def on_delete_profile_btn_click():
             sqlite.update_user(curr_user_)
             st.session_state['curr_user'] = curr_user_
             break
-    st.session_state['selected_profile_index'] = 0
+            
+    st.session_state['selected_profile_index'] = len(curr_user_.profiles) - 1
     st.session_state.update()
     st.success(f"Профиль '{st.session_state["selected_profile_name"]}' был успешно удален")
 
@@ -181,7 +182,7 @@ if 'selected_profile_index' not in st.session_state:
 
 st.session_state.update()
 st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values, key='selected_profile_name',
-             index=user_profiles_cb_values.index(st.session_state['selected_profile_name']))
+             index=st.session_state['selected_profile_name'])
 
 for i, profile in enumerate(curr_user.profiles):
     if profile.name == st.session_state["selected_profile_name"]:
