@@ -52,7 +52,6 @@ def on_delete_profile_btn_click():
     st.session_state.update()
     curr_user_ = st.session_state['curr_user']
     selected_profile_name_ = st.session_state["selected_profile_name"]
-    st.write(selected_profile_name_)
 
     if len(curr_user_.profiles) <= 1:
         st.error('Минимальное количество профилей: 1')
@@ -104,19 +103,6 @@ def on_clear_message_history_btn_click():
             st.session_state['curr_user'] = curr_user_
             st.session_state.update()
             break
-
-
-# def on_change_profiles_sb():
-#     curr_user_ = st.session_state['curr_user']
-#     selected_profile_name_ = st.session_state["selected_profile_name"]
-#     for i, profile_ in enumerate(curr_user_.profiles):
-#         if profile_.name == selected_profile_name_:
-#             st.session_state['prompt'] = profile_.prompt
-#             st.session_state['history'] = profile_.history
-#             st.session_state['responses'] = profile_.responses
-#             st.session_state['requests'] = profile_.requests
-#             st.session_state['selected_profile_index'] = i
-#             break
 
 
 st.subheader("Ассистент по теме 'Синхротроны'")
@@ -191,7 +177,9 @@ user_profiles_cb_values = map(lambda p: p.name, curr_user.profiles)
 if 'selected_profile_index' not in st.session_state:
     st.session_state['selected_profile_index'] = 0
 
-st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values, key='selected_profile_name')
+st.session_state.update()
+st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values, key='selected_profile_name',
+             index=st.session_state['selected_profile_index'])
 
 for i, profile in enumerate(curr_user.profiles):
     if profile.name == st.session_state["selected_profile_name"]:
