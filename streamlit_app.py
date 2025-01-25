@@ -46,6 +46,7 @@ def on_add_profile_btn_click():
     st.session_state['curr_user'] = curr_user_
     st.session_state['selected_profile_index'] += 1
     st.session_state.update()
+    st.success(f"Профиль '{st.session_state['upd_prof_name']}' был успешно добавлен")
 
 
 def on_delete_profile_btn_click():
@@ -65,6 +66,7 @@ def on_delete_profile_btn_click():
             break
     st.session_state['selected_profile_index'] = 0
     st.session_state.update()
+    st.success(f"Профиль '{st.session_state["selected_profile_name"]}' был успешно удален")
 
 
 def on_change_profile_name_btn_click():
@@ -173,13 +175,13 @@ if len(curr_user.profiles) == 0:
     sqlite.update_user(user=curr_user)
 
 st.session_state['curr_user'] = curr_user
-user_profiles_cb_values = map(lambda p: p.name, curr_user.profiles)
+user_profiles_cb_values = list(map(lambda p: p.name, curr_user.profiles))
 if 'selected_profile_index' not in st.session_state:
     st.session_state['selected_profile_index'] = 0
 
 st.session_state.update()
 st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values, key='selected_profile_name',
-             index=st.session_state['selected_profile_index'])
+             index=user_profiles_cb_values.index(st.session_state['selected_profile_name']))
 
 for i, profile in enumerate(curr_user.profiles):
     if profile.name == st.session_state["selected_profile_name"]:
@@ -188,7 +190,6 @@ for i, profile in enumerate(curr_user.profiles):
         st.session_state['requests'] = profile.requests
         st.session_state['prompt'] = profile.prompt
         st.session_state['selected_profile_index'] = i
-        st.write(st.session_state['selected_profile_index'])
         break
 
 if st.session_state['prompt'] == '':
