@@ -61,6 +61,7 @@ def on_delete_profile_btn_click():
             sqlite.update_user(curr_user_)
             st.session_state['curr_user'] = curr_user_
             break
+    st.session_state['selected_profile_index'] -= 1
 
 
 def on_change_profile_name_btn_click():
