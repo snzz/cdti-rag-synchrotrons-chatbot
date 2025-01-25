@@ -39,7 +39,7 @@ def on_add_profile_btn_click():
             return
 
     global system_msg
-    curr_user_.profiles.append(sqlite.Profile(id=uuid.uuid4(), name='Новый профиль', history=[],
+    curr_user_.profiles.append(sqlite.Profile(id=uuid.uuid4(), name=new_profile_name, history=[],
                                               responses=["Чем я могу Вам помочь?"], requests=[],
                                               prompt=system_msg))
     sqlite.update_user(user=curr_user_)
@@ -151,6 +151,7 @@ qa.combine_docs_chain.llm_chain.prompt = prompt_template
 ### НАСТРОЙКА LLM
 
 # db
+sqlite.clear_table(sqlite.db_name, 'Users')
 sqlite.init_users_table()
 #
 
