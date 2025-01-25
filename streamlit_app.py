@@ -229,20 +229,22 @@ with st.expander('Параметры чата', icon='🔧'):
     # Выбор элемента в ComboBox
     st.session_state.update()
     default_prompt_str = st.text_area('Стандартный промпт ассистента:', value=st.session_state['prompt'])
-    if not default_prompt_str == "":
-        if 'Контекст: {context}' not in default_prompt_str:
-            default_prompt_str += ' Контекст: {context}'
-        prompt_template = ChatPromptTemplate.from_messages(
-            [default_prompt_str, MessagesPlaceholder(variable_name="history"), human_msg_template]
-        )
-        qa.combine_docs_chain.llm_chain.prompt = prompt_template
+    if 'Контекст: {context}' not in default_prompt_str:
+        default_prompt_str += ' Контекст: {context}'
+
+    st.session_state['prompt'] = default_prompt_str
+    prompt_template = ChatPromptTemplate.from_messages(
+        [default_prompt_str, MessagesPlaceholder(variable_name="history"), human_msg_template]
+    )
+    qa.combine_docs_chain.llm_chain.prompt = prompt_template
+
     for profile in curr_user.profiles:
         if profile.name == st.session_state["selected_profile_name"]:
             profile = sqlite.Profile(id=profile.id, name=profile.name,
                                      history=st.session_state["history"],
                                      responses=st.session_state["responses"],
                                      requests=st.session_state["requests"],
-                                     prompt=default_prompt_str)
+                                     prompt=st.session_state['prompt'])
             sqlite.update_user(curr_user)
             break
 
