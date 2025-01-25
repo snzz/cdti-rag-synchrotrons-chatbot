@@ -193,9 +193,7 @@ for profile in curr_user.profiles:
 if st.session_state['prompt'] == '':
     st.session_state['prompt'] = system_msg_template
 
-upd_prof_name = st.text_input('Введите название профиля')
-if not upd_prof_name == "":
-    st.session_state["upd_prof_name"] = upd_prof_name
+st.session_state["upd_prof_name"] = st.text_input('Введите название профиля')
 
 prof_name_col1, prof_name_col2 = st.columns(2)
 prof_name_col1.button(label='Добавить новый профиль', use_container_width=True,
