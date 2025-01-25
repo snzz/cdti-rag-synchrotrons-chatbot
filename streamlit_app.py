@@ -67,6 +67,7 @@ def on_delete_profile_btn_click():
 
 
 def on_change_profile_name_btn_click():
+    st.session_state.update()
     curr_user_ = st.session_state['curr_user']
     selected_profile_name_ = st.session_state["selected_profile_name"]
 
