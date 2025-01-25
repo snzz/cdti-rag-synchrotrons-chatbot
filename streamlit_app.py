@@ -194,7 +194,8 @@ if 'selected_profile_index' not in st.session_state:
     st.session_state['selected_profile_index'] = 0
 
 st.session_state.update()
-st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values, key='selected_profile_name')
+st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values, key='selected_profile_name',
+             index=st.session_state['selected_profile_index'])
 
 for i, profile in enumerate(curr_user.profiles):
     if profile.name == st.session_state["selected_profile_name"]:
@@ -229,7 +230,8 @@ with st.expander('Параметры чата', icon='🔧'):
     # Выбор элемента в ComboBox
     st.session_state.update()
     default_prompt_str = st.text_area('Стандартный промпт ассистента:', value=st.session_state['prompt'])
-    if st.button('Сохранить', use_container_width=True):
+    
+    if st.columns(1).button('Сохранить', use_container_width=True):
         if 'Контекст: {context}' not in default_prompt_str:
             default_prompt_str += ' Контекст: {context}'
 
