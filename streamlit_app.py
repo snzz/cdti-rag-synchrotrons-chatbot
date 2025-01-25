@@ -80,7 +80,6 @@ def on_change_profile_name_btn_click():
     st.session_state.update()
     curr_user_ = st.session_state['curr_user']
     selected_profile_name_ = st.session_state["selected_profile_name"]
-    st.write(selected_profile_name_)
 
     new_profile_name = st.session_state["upd_prof_name"]
     if new_profile_name == '':
@@ -241,7 +240,6 @@ with st.expander('Параметры чата', icon='🔧'):
 
         for i, profile in enumerate(curr_user.profiles):
             if profile.name == st.session_state["selected_profile_name"]:
-                st.write(f'saved prompt: {st.session_state['prompt']}')
                 curr_user.profiles[i] = sqlite.Profile(id=profile.id, name=profile.name,
                                                        history=st.session_state["history"],
                                                        responses=st.session_state["responses"],
