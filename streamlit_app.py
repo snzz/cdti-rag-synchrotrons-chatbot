@@ -208,7 +208,6 @@ if st.session_state['prompt'] == '':
     st.session_state['prompt'] = system_msg_template
 
 updated_profile_name = st.text_input('Введите название профиля', key="upd_prof_name")
-st.session_state["upd_prof_name"] = updated_profile_name
 st.session_state.update()
 
 prof_name_col1, prof_name_col2 = st.columns(2)
