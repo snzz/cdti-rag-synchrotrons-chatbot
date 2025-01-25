@@ -22,9 +22,9 @@ import utils
 from utils import *
 
 
-def on_add_profile_btn_click(profile_name):
+def on_add_profile_btn_click():
     st.session_state.update()
-    if profile_name == '':
+    if st.session_state['upd_prof_name'] == '':
         st.error('Название профиля не может быть пустым')
         return
 
@@ -34,12 +34,12 @@ def on_add_profile_btn_click(profile_name):
         return
 
     for profile_ in curr_user_.profiles:
-        if profile_.name == profile_name:
+        if profile_.name == st.session_state['upd_prof_name']:
             st.error('Профиль с таким названием уже существует')
             return
 
     global system_msg
-    curr_user_.profiles.append(sqlite.Profile(id=uuid.uuid4(), name=profile_name, history=[],
+    curr_user_.profiles.append(sqlite.Profile(id=uuid.uuid4(), name=st.session_state['upd_prof_name'], history=[],
                                               responses=["Чем я могу Вам помочь?"], requests=[],
                                               prompt=system_msg))
     sqlite.update_user(user=curr_user_)
@@ -68,7 +68,7 @@ def on_delete_profile_btn_click():
     st.session_state.update()
 
 
-def on_change_profile_name_btn_click(profile_name):
+def on_change_profile_name_btn_click():
     st.session_state.update()
     curr_user_ = st.session_state['curr_user']
     selected_profile_name_ = st.session_state["selected_profile_name"]
