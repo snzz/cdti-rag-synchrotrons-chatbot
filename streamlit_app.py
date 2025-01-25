@@ -49,7 +49,7 @@ def on_add_profile_btn_click():
 
 def on_delete_profile_btn_click():
     curr_user_ = st.session_state['curr_user']
-    selected_profile_name_ = st.session_state.selected_profile_name
+    selected_profile_name_ = st.session_state["selected_profile_name"]
 
     if len(curr_user_.profiles) <= 1:
         st.error('Минимальное количество профилей: 1')
@@ -65,7 +65,7 @@ def on_delete_profile_btn_click():
 
 def on_change_profile_name_btn_click():
     curr_user_ = st.session_state['curr_user']
-    selected_profile_name_ = st.session_state.selected_profile_name
+    selected_profile_name_ = st.session_state["selected_profile_name"]
 
     new_profile_name = st.session_state["upd_prof_name"]
     if new_profile_name == '':
@@ -82,7 +82,7 @@ def on_change_profile_name_btn_click():
 
 def on_clear_message_history_btn_click():
     curr_user_ = st.session_state['curr_user']
-    selected_profile_name_ = st.session_state.selected_profile_name
+    selected_profile_name_ = st.session_state["selected_profile_name"]
     for profile_ in curr_user_.profiles:
         if profile_.name == selected_profile_name_:
             profile_.history = []
@@ -98,7 +98,7 @@ def on_clear_message_history_btn_click():
 
 def on_change_profiles_sb():
     curr_user_ = st.session_state['curr_user']
-    selected_profile_name_ = st.session_state.selected_profile_name
+    selected_profile_name_ = st.session_state["selected_profile_name"]
     for i, profile_ in enumerate(curr_user_.profiles):
         if profile_.name == selected_profile_name_:
             st.session_state['prompt'] = profile_.prompt
@@ -181,11 +181,12 @@ user_profiles_cb_values = map(lambda p: p.name, curr_user.profiles)
 if 'selected_profile_index' not in st.session_state:
     st.session_state['selected_profile_index'] = 0
 
-selected_profile_name = st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values,
-                                     on_change=on_change_profiles_sb, index=st.session_state['selected_profile_index'])
+st.session_state["selected_profile_name"] = st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values,
+                                                         on_change=on_change_profiles_sb,
+                                                         index=st.session_state['selected_profile_index'])
 
 for profile in curr_user.profiles:
-    if profile.name == selected_profile_name:
+    if profile.name == st.session_state["selected_profile_name"]:
         st.session_state["history"] = profile.history
         st.session_state['responses'] = profile.responses
         st.session_state['requests'] = profile.requests
