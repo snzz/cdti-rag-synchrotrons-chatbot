@@ -177,7 +177,7 @@ if len(curr_user.profiles) == 0:
 
 st.session_state['curr_user'] = curr_user
 user_profiles_cb_values = map(lambda p: p.name, curr_user.profiles)
-if not st.session_state['selected_profile_index']:
+if 'selected_profile_index' not in st.session_state:
     st.session_state['selected_profile_index'] = 0
 
 selected_profile_name = st.selectbox(label='Выберите профиль:', options=user_profiles_cb_values,
