@@ -166,7 +166,7 @@ qa.combine_docs_chain.llm_chain.prompt = prompt_template
 sqlite.init_users_table()
 #
 
-st.write(st.experimental_user)
+st.write(st.user)
 curr_user_email = st.experimental_user.email
 users_collection = sqlite.get_users()
 if not users_collection:
