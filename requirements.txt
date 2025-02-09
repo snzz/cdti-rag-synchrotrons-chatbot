@@ -5,9 +5,7 @@ langchain
 langchain-community
 streamlit_chat
 sentence-transformers
-pinecone
+pinecone==v5.4.2
 langchain_openai
 langchain_pinecone
-firebase_admin
-pymongo==4.10.1
 certifi
