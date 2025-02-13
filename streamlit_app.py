@@ -268,20 +268,18 @@ with textcontainer:
             ]
 
             # Добавление английской версии запроса для получение информации из англоязычных источников
-            query += f'{ts.translate_text(query_text=query, translator='google', 
-                                          from_language='ru', to_language='en')}'
+            processed_query = f' {ts.deepl(query_text=query, translator='google', to_language='en')}'
 
             response = qa(
-                {"question": query, "history": formatted_history, "chat_history": formatted_history}
+                {"question": processed_query, "history": formatted_history, "chat_history": formatted_history}
             )
 
             answer = utils.format_math_expressions(response["answer"])
             # Перевод ответа на русский
-            answer = ts.translate_text(query_text=answer, translator='google',
-                                       from_language='en', to_language='ru')
+            answer = ts.deepl(query_text=answer, translator='google', to_language='ru')
 
             # Сохранение вопроса и ответа в контексте
-            st.session_state["history"].append((query, answer))
+            st.session_state["history"].append((processed_query, answer))
 
             # Отображение источников
             source_docs = []
