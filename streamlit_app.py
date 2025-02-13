@@ -16,6 +16,7 @@ from langchain.prompts import (
 )
 import streamlit as st
 from streamlit_chat import message
+from googletrans import Translator
 
 import sqlite
 import utils
@@ -129,6 +130,7 @@ if 'requests' not in st.session_state:
     st.session_state['requests'] = []
 
 ### Other Stuff
+translator = Translator()
 
 ### НАСТРОЙКА LLM
 os.environ['OPENAI_API_KEY'] = st.secrets["general"]["OPENAI_API_KEY"]
@@ -266,7 +268,7 @@ with textcontainer:
             ]
 
             # Добавление английской версии запроса для получение информации из англоязычных источников
-            # query += f'{translator.translate(query, src='ru', dest='en').text}'
+            query += f'{translator.translate(query, src='ru', dest='en').text}'
 
             response = qa(
                 {"question": query, "history": formatted_history, "chat_history": formatted_history}
@@ -274,7 +276,7 @@ with textcontainer:
 
             answer = utils.format_math_expressions(response["answer"])
             # Перевод ответа на русский
-            # answer = translator.translate(answer, src='en', dest='ru').text
+            answer = translator.translate(answer, src='en', dest='ru').text
 
             # Сохранение вопроса и ответа в контексте
             st.session_state["history"].append((query, answer))
