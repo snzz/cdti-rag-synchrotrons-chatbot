@@ -1,4 +1,3 @@
-googletrans==3.1.0-alpha
 streamlit==1.41.0
 openai
 torch
