@@ -269,7 +269,7 @@ with textcontainer:
 
             # Добавление английской версии запроса для получение информации из англоязычных источников
             query += f'{ts.translate_text(query_text=query, translator='google', 
-                                          from_language='ru', to_language='en').text}'
+                                          from_language='ru', to_language='en')}'
 
             response = qa(
                 {"question": query, "history": formatted_history, "chat_history": formatted_history}
@@ -278,7 +278,7 @@ with textcontainer:
             answer = utils.format_math_expressions(response["answer"])
             # Перевод ответа на русский
             answer = ts.translate_text(query_text=answer, translator='google',
-                                       from_language='en', to_language='ru').text
+                                       from_language='en', to_language='ru')
 
             # Сохранение вопроса и ответа в контексте
             st.session_state["history"].append((query, answer))
