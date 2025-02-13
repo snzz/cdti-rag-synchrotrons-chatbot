@@ -9,3 +9,4 @@ pinecone==v5.4.2
 langchain_openai
 langchain_pinecone
 certifi
+googletrans==3.1.0-alpha
