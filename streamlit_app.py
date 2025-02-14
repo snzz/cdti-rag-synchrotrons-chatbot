@@ -305,7 +305,7 @@ with textcontainer:
 with response_container:
     if st.session_state['responses']:
         for i in range(len(st.session_state['responses'])):
-            with st.chat_message(st.session_state['responses'][i], avatar='nic_ki.svg', key=str(i)):
+            with st.chat_message(avatar='nic_ki.svg', key=str(i)):
                 st.write(st.session_state['responses'][i])
                 if i < len(st.session_state['requests']):
                     with st.chat_message(avatar='rosatom.png', is_user=True, key=str(i) + '_user'):
