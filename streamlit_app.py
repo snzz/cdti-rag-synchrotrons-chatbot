@@ -308,5 +308,5 @@ with response_container:
             with st.chat_message(name='ai'):
                 st.write(st.session_state['responses'][i])
             if i < len(st.session_state['requests']):
-                with st.chat_message(name='user', is_user=True):
+                with st.chat_message(name='user'):
                     st.write(st.session_state["requests"][i])
