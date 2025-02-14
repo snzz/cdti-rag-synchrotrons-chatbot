@@ -307,6 +307,6 @@ with response_container:
         for i in range(len(st.session_state['responses'])):
             with st.chat_message(name='ai', avatar='nic_ki.svg'):
                 st.write(st.session_state['responses'][i])
-                if i < len(st.session_state['requests']):
-                    with st.chat_message(name='user', avatar='rosatom.png', is_user=True):
-                        st.write(st.session_state["requests"][i])
+            if i < len(st.session_state['requests']):
+                with st.chat_message(name='user', avatar='rosatom.png', is_user=True):
+                    st.write(st.session_state["requests"][i])
