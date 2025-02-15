@@ -293,8 +293,8 @@ with textcontainer:
             source_docs = []
             answer += '\n\n**Источники:**'
             for doc in response["source_documents"]:
-                doc_str = f'\n- {doc.metadata.get('source', 'Неизвестный источник')}'
-                doc_str = os.path.basename(doc_str)
+                doc_str = os.path.basename(doc.metadata.get('source', 'Неизвестный источник'))
+                doc_str = f'\n- {doc_str}'
                 if doc_str not in source_docs:
                     source_docs.append(doc_str)
                     answer += doc_str
