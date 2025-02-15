@@ -165,7 +165,7 @@ qa = ConversationalRetrievalChain.from_llm(
     llm=llm,
     retriever=vectorstore.as_retriever(
         search_type="mmr",
-        search_kwargs={'k': 6, 'lambda_mult': 0.5}
+        search_kwargs={'k': 6, 'lambda_mult': 0.25}
     ),
     return_source_documents=True,
     verbose=True
