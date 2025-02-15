@@ -281,7 +281,7 @@ with textcontainer:
 
             answer = utils.format_math_expressions(response["answer"])
             # Перевод ответа на русский
-            answer = ts.translate_text(query_text=answer, translator='deepl', to_language='ru')
+            answer = ts.translate_text(query_text=answer, translator='google', to_language='ru')
 
             # Сохранение вопроса и ответа в контексте
             st.session_state["history"].append((processed_query, answer))
