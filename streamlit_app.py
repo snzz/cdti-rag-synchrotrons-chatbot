@@ -143,7 +143,7 @@ index_name = 'synchrotrons-index'
 llm = ChatOpenAI(api_key='sk-Du8PwFImWdVMNR6WFVqcLJh7uBiPdQUX', base_url='https://api.proxyapi.ru/openai/v1')
 
 if 'buffer_memory' not in st.session_state:
-    st.session_state.buffer_memory = ConversationBufferWindowMemory(k=3, return_messages=True)
+    st.session_state.buffer_memory = ConversationBufferWindowMemory(k=4, return_messages=True)
 
 # Дефолтный промпт для ассистента
 system_msg = ("Ты ассистент физических наук, отвечай настолько, насколько возможно правдиво, " +
@@ -163,7 +163,10 @@ vectorstore = PineconeVectorStore.from_existing_index(index_name=index_name, emb
 
 qa = ConversationalRetrievalChain.from_llm(
     llm=llm,
-    retriever=vectorstore.as_retriever(),
+    retriever=vectorstore.as_retriever(
+        search_type="mmr",
+        search_kwargs={'k': 6, 'lambda_mult': 0.5}
+    ),
     return_source_documents=True,
     verbose=True
 )
