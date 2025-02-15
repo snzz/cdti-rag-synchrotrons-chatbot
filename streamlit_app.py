@@ -129,13 +129,15 @@ if 'responses' not in st.session_state:
 if 'requests' not in st.session_state:
     st.session_state['requests'] = []
 
-### Other Stuff
-
-
 ### НАСТРОЙКА LLM
 os.environ['OPENAI_API_KEY'] = st.secrets["general"]["OPENAI_API_KEY"]
 index_name = 'synchrotrons-index'
-llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
+
+# OpenAI
+# llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
+
+# DeepSeek
+llm = ChatOpenAI(api_key='sk-73569156610e4ff6a3b5fc88b03c5799', base_url='https://api.deepseek.com')
 
 if 'buffer_memory' not in st.session_state:
     st.session_state.buffer_memory = ConversationBufferWindowMemory(k=3, return_messages=True)
