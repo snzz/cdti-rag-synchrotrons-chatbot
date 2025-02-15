@@ -137,7 +137,10 @@ index_name = 'synchrotrons-index'
 # llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
 
 # DeepSeek
-llm = ChatOpenAI(api_key='sk-73569156610e4ff6a3b5fc88b03c5799', base_url='https://api.deepseek.com')
+# llm = ChatOpenAI(api_key='sk-73569156610e4ff6a3b5fc88b03c5799', base_url='https://api.deepseek.com')
+
+# ProxyAPI DeepSeek
+llm = ChatOpenAI(api_key='sk-Du8PwFImWdVMNR6WFVqcLJh7uBiPdQUX', base_url='https://api.proxyapi.ru/deepseek')
 
 if 'buffer_memory' not in st.session_state:
     st.session_state.buffer_memory = ConversationBufferWindowMemory(k=3, return_messages=True)
