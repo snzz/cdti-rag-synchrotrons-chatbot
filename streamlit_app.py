@@ -140,7 +140,7 @@ index_name = 'synchtrotrons-large-index'
 # llm = ChatOpenAI(api_key='sk-73569156610e4ff6a3b5fc88b03c5799', base_url='https://api.deepseek.com')
 
 # ProxyAPI DeepSeek
-llm = ChatOpenAI(model_name='o3-mini', api_key='sk-Du8PwFImWdVMNR6WFVqcLJh7uBiPdQUX', base_url='https://api.proxyapi.ru/openai/v1')
+llm = ChatOpenAI(model_name='o3-mini')
 
 if 'buffer_memory' not in st.session_state:
     st.session_state.buffer_memory = ConversationBufferWindowMemory(k=4, return_messages=True)
