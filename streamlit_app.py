@@ -14,6 +14,13 @@ from langchain.prompts import (
     ChatPromptTemplate,
     MessagesPlaceholder
 )
+from pydantic import (
+    BaseModel,
+    SecretBytes,
+    SecretStr,
+    ValidationError,
+    field_serializer,
+)
 import streamlit as st
 from streamlit_chat import message
 import translators as ts
@@ -130,8 +137,8 @@ if 'requests' not in st.session_state:
     st.session_state['requests'] = []
 
 ### НАСТРОЙКА LLM
-os.environ['OPENAI_API_KEY'] = st.secrets["general"]["OPENAI_API_KEY"]
-index_name = 'synchrotrons-index'
+# os.environ['OPENAI_API_KEY'] = st.secrets["general"]["OPENAI_API_KEY"]
+index_name = 'synchtrotrons-large-index'
 
 # OpenAI
 # llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
@@ -140,7 +147,9 @@ index_name = 'synchrotrons-index'
 # llm = ChatOpenAI(api_key='sk-73569156610e4ff6a3b5fc88b03c5799', base_url='https://api.deepseek.com')
 
 # ProxyAPI DeepSeek
-llm = ChatOpenAI(model_name='o3-mini', api_key='sk-Du8PwFImWdVMNR6WFVqcLJh7uBiPdQUX', base_url='https://api.proxyapi.ru/openai/v1')
+llm = ChatOpenAI(model_name='o3-mini',
+                 api_key='sk-Du8PwFImWdVMNR6WFVqcLJh7uBiPdQUX',
+                 base_url='https://api.proxyapi.ru/openai/v1')
 
 if 'buffer_memory' not in st.session_state:
     st.session_state.buffer_memory = ConversationBufferWindowMemory(k=4, return_messages=True)
@@ -157,7 +166,8 @@ prompt_template = ChatPromptTemplate.from_messages(
 )
 
 embeddings = OpenAIEmbeddings(
-    model='text-embedding-3-small'
+    model='text-embedding-3-large',
+    api_key=SecretStr(secret_value='sk-Du8PwFImWdVMNR6WFVqcLJh7uBiPdQUX')
 )
 vectorstore = PineconeVectorStore.from_existing_index(index_name=index_name, embedding=embeddings)
 

@@ -11,3 +11,4 @@ langchain_pinecone
 certifi
 translators==5.9.5
 deep-translator
+pydantic
