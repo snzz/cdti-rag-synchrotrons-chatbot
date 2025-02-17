@@ -276,7 +276,8 @@ with textcontainer:
             ]
 
             # Добавление английской версии запроса для получение информации из англоязычных источников
-            processed_query = f' {ts.translate_text(query_text=query, translator='google', to_language='en')}'
+            processed_query = query
+            # processed_query = f' {ts.translate_text(query_text=query, translator='google', to_language='en')}'
 
             response = qa(
                 {"question": processed_query, "history": formatted_history, "chat_history": formatted_history}
@@ -284,7 +285,7 @@ with textcontainer:
 
             answer = utils.format_math_expressions(response["answer"])
             # Перевод ответа на русский
-            answer = ts.translate_text(query_text=answer, translator='yandex', to_language='ru')
+            # answer = ts.translate_text(query_text=answer, translator='yandex', to_language='ru')
 
             # Сохранение вопроса и ответа в контексте
             st.session_state["history"].append((processed_query, answer))
