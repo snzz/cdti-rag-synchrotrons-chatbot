@@ -131,7 +131,7 @@ if 'requests' not in st.session_state:
 
 ### НАСТРОЙКА LLM
 os.environ['OPENAI_API_KEY'] = st.secrets["general"]["OPENAI_API_KEY"]
-index_name = 'synchrotrons-index'
+index_name = 'synchtrotrons-large-index'
 
 # OpenAI
 # llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
@@ -157,7 +157,7 @@ prompt_template = ChatPromptTemplate.from_messages(
 )
 
 embeddings = OpenAIEmbeddings(
-    model='text-embedding-3-small'
+    model='text-embedding-3-large'
 )
 vectorstore = PineconeVectorStore.from_existing_index(index_name=index_name, embedding=embeddings)
 
