@@ -134,7 +134,7 @@ os.environ['OPENAI_API_KEY'] = st.secrets["general"]["OPENAI_API_KEY"]
 index_name = 'synchtrotrons-large-index'
 
 # OpenAI
-llm = ChatOpenAI(model_name="o3-mini", temperature=0)
+llm = ChatOpenAI(model_name="o3-mini")
 
 # DeepSeek
 # llm = ChatOpenAI(api_key='sk-73569156610e4ff6a3b5fc88b03c5799', base_url='https://api.deepseek.com')
